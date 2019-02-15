@@ -1,0 +1,5 @@
+#!/bin/bash
+sudo scripts/bb_triple_stop.sh
+make lora_gateway_bb_all_modules
+sudo ./scripts/config_board.sh
+sudo ./lora_gateway_bb_module1
