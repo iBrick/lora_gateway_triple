@@ -18,6 +18,12 @@ bash scripts/triple_stop.sh &> /dev/null
 ./lora_gateway_bb_module0 --raw | python post_processing_gw.py
 ```
 
+Полученные по радио пакеты отправляются в MQTT. 
+Пример получаемых сообщений: 
+igla/IGLA/Sensor8/DEF AAgNGJQD - без шифрования. 
+igla/IGLA/Sensor8/DEF BfKNf+G+PcTT  - с шифрованием по ГОСТ
+Полученные данные упакованы в формат google.protobuf. 
+MQTT принимает дальше приложение LoRa Parser, и сохраняет в БД Postgres 9.6. По умолчанию в Postgres используется БД igla , user/pass igla/igla
 
 Low-cost LoRa gateway features and configuration tools
 ======================================================
