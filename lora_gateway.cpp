@@ -311,10 +311,10 @@ bool optNDL=false;
 unsigned long lastDownlinkCheckTime=0;
 // we set to 5s after the gw receives a lora packet
 // to give some time for the post-processing stage to generate a downlink.txt file if any
-unsigned long interDownlinkCheckTime=5000L;
+unsigned long interDownlinkCheckTime=1000L;// Renha: was: 5000L;
 unsigned long lastDownlinkSendTime=0;
 // 20s between 2 downlink transmissions when there are queued requests
-unsigned long interDownlinkSendTime=20000L;
+unsigned long interDownlinkSendTime=2000L;// Renha: was: 20000L;
 
 //#define INCLUDE_MIC_IN_DOWNLINK
 
