@@ -888,7 +888,7 @@ while True:
 					#it is possible to have a broadcast address but since the only device that is listening 
 					#is the one that has sent a packet, there is little interest in doing so
 					#so currently, we use the sending device's address to compute the MIC
-					MIC=loraWAN_get_MIC(src,request_json["data"])
+					MIC=[0,0,0,0]# Renha: was MIC=loraWAN_get_MIC(src,request_json["data"])
 					#add the 4 byte MIC information into the json line
 					request_json['MIC0']=hex(MIC[0])
 					request_json['MIC1']=hex(MIC[1])

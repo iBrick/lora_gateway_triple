@@ -212,7 +212,7 @@
 // Include the SX1272 
 #include "SX1272.h"
 
-#include "base64/Base64.h"
+#include "Base64.h"
 
 #ifdef ARDUINO
 // IMPORTANT when using an Arduino only. For a Raspberry-based gateway the distribution uses a radio.makefile file
@@ -305,7 +305,7 @@ int dl_line_index;
 ssize_t dl_line_size;
 int dl_total_line;
 bool hasDownlinkEntry=false;
-bool enableDownlinkCheck=false;
+bool enableDownlinkCheck=true; // Renha: was false;
 bool optNDL=false;
 
 unsigned long lastDownlinkCheckTime=0;
@@ -334,11 +334,11 @@ int xtoi(const char *hexstring);
 #define MAX_NB_CHANNEL 15
 #define STARTING_CHANNEL 4
 #define ENDING_CHANNEL 18
-#ifdef SENEGAL_REGULATION
-uint8_t loraChannelIndex=0;
-#else
-uint8_t loraChannelIndex=6;
-#endif
+//#ifdef SENEGAL_REGULATION
+//uint8_t loraChannelIndex=0;
+//#else
+uint8_t loraChannelIndex=7;
+//#endif
 uint32_t loraChannelArray[MAX_NB_CHANNEL]={CH_04_868,CH_05_868,CH_06_868,CH_07_868,CH_08_868,CH_09_868,
                                             CH_10_868,CH_11_868,CH_12_868,CH_13_868,CH_14_868,CH_15_868,CH_16_868,CH_17_868,CH_18_868};
 
@@ -1509,8 +1509,10 @@ void loop(void)
   
 #if not defined ARDUINO && defined DOWNLINK
   // handle downlink request
-  else {
-  	
+  if (1){ //Renha: was: else {
+  	    // Renha: additonal debug
+  	PRINT_CSTSTR("^$RNH: %s","Checking for downlink\n");
+
 	  bool triggerDownlinkCheck=false;
 				
   	// have we wrapped around?
@@ -1519,6 +1521,15 @@ void loop(void)
                 triggerDownlinkCheck=true;            
 	  }  
 	
+  	if(triggerDownlinkCheck) PRINT_CSTSTR("^$RNH: %s","TDC is true\n");
+  	else PRINT_CSTSTR("^$RNH: %s","TDC is false\n");
+  	if(enableDownlinkCheck) PRINT_CSTSTR("^$RNH: %s","EDC is true\n");
+  	else PRINT_CSTSTR("^$RNH: %s","EDC is false\n");
+	  triggerDownlinkCheck=true;
+
+
+
+
     if ( (millis()-lastDownlinkCheckTime > interDownlinkCheckTime || triggerDownlinkCheck) && enableDownlinkCheck)  {	
     	
     		char time_buffer[30];
@@ -1790,6 +1801,7 @@ void loop(void)
         	lastDownlinkSendTime=millis();
         }
     }	
+  	PRINT_CSTSTR("^$RNH: %s","Downlink code has been included\n");
 #endif
 } 
 

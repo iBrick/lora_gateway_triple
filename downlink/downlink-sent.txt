@@ -1,1 +1,14 @@
-2018-12-24T15:25:47.345 {"status":"sent","dst":6,"data":"reply from gw"}
+2019-02-20T10:56:43.921 {"status":"sent","dst":6,"data":"for device 6"}
+2019-02-20T12:02:56.014 {"status":"sent","dst":8,"MIC3":"0x0","MIC2":"0x0","MIC1":"0x0","MIC0":"0x0","data":"AAgNGJQD"}
+2019-02-20T12:03:49.573 {"status":"sent","dst":8,"MIC3":"0x0","MIC2":"0x0","MIC1":"0x0","MIC0":"0x0","data":"AAgNGJQD"}
+2019-02-20T12:04:39.769 {"status":"sent","dst":8,"MIC3":"0x0","MIC2":"0x0","MIC1":"0x0","MIC0":"0x0","data":"AAgNGJQD"}
+2019-02-20T12:05:29.947 {"status":"sent","dst":8,"MIC3":"0x0","MIC2":"0x0","MIC1":"0x0","MIC0":"0x0","data":"AAgNGJQD"}
+2019-02-20T12:06:20.161 {"status":"sent","dst":8,"MIC3":"0x0","MIC2":"0x0","MIC1":"0x0","MIC0":"0x0","data":"AAgNGJQD"}
+2019-02-20T12:07:10.366 {"status":"sent","dst":8,"MIC3":"0x0","MIC2":"0x0","MIC1":"0x0","MIC0":"0x0","data":"AAgNGJQD"}
+2019-02-20T12:08:00.554 {"status":"sent","dst":8,"MIC3":"0x0","MIC2":"0x0","MIC1":"0x0","MIC0":"0x0","data":"AAgNGJQD"}
+2019-02-20T12:08:50.861 {"status":"sent","dst":8,"MIC3":"0x0","MIC2":"0x0","MIC1":"0x0","MIC0":"0x0","data":"AAgNGJQD"}
+2019-02-20T12:09:41.094 {"status":"sent","dst":8,"MIC3":"0x0","MIC2":"0x0","MIC1":"0x0","MIC0":"0x0","data":"AAgNGJQD"}
+2019-02-20T12:10:31.317 {"status":"sent","dst":8,"MIC3":"0x0","MIC2":"0x0","MIC1":"0x0","MIC0":"0x0","data":"AAgNGJQD"}
+2019-02-20T12:11:21.531 {"status":"sent","dst":8,"MIC3":"0x0","MIC2":"0x0","MIC1":"0x0","MIC0":"0x0","data":"AAgNGJQD"}
+2019-02-20T12:12:11.762 {"status":"sent","dst":8,"MIC3":"0x0","MIC2":"0x0","MIC1":"0x0","MIC0":"0x0","data":"AAgNGJQD"}
+2019-02-20T12:13:01.989 {"status":"sent","dst":8,"MIC3":"0x0","MIC2":"0x0","MIC1":"0x0","MIC0":"0x0","data":"AAgNGJQD"}

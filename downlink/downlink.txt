@@ -1,0 +1,1 @@
+{"status": "send_request", "dst": 8, "MIC3": "0x0", "MIC2": "0x0", "MIC1": "0x0", "MIC0": "0x0", "data": "AAgNGJQD"}

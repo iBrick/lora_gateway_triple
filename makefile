@@ -42,11 +42,11 @@ lora_gateway_bb: lora_gateway_bb.o Base64.o arduPi_bb.o SX1272_bb.o
 lora_gateway_bb_module0: lora_gateway_bb.o arduPi_bb.o SX1272_bb_module0.o SPI.o GPIO.o Base64.o
 	g++ -lrt -lpthread SPI.o GPIO.o lora_gateway_bb.o Base64.o arduPi_bb.o SX1272_bb_module0.o -o lora_gateway_bb_module0
 
-lora_gateway_bb_module1: lora_gateway_bb.o arduPi_bb.o SX1272_bb_module1.o SPI.o GPIO.o Base64.o
-	g++ -lrt -lpthread SPI.o GPIO.o lora_gateway_bb.o Base64.o arduPi_bb.o SX1272_bb_module1.o -o lora_gateway_bb_module1
+lora_gateway_bb_module1: lora_gateway_bb_downlink.o arduPi_bb.o SX1272_bb_module1.o SPI.o GPIO.o Base64.o
+	g++ -lrt -lpthread SPI.o GPIO.o lora_gateway_bb_downlink.o Base64.o arduPi_bb.o SX1272_bb_module1.o -o lora_gateway_bb_module1
 
-lora_gateway_bb_module2: lora_gateway_bb_downlink.o arduPi_bb.o SX1272_bb_module2.o SPI.o GPIO.o Base64.o
-	g++ -lrt -lpthread SPI.o GPIO.o lora_gateway_bb_downlink.o Base64.o arduPi_bb.o SX1272_bb_module2.o -o lora_gateway_bb_module2
+lora_gateway_bb_module2: lora_gateway_bb.o arduPi_bb.o SX1272_bb_module2.o SPI.o GPIO.o Base64.o
+	g++ -lrt -lpthread SPI.o GPIO.o lora_gateway_bb.o Base64.o arduPi_bb.o SX1272_bb_module2.o -o lora_gateway_bb_module2
 
 lora_gateway_wnetkey: lora_gateway.o arduPi.o SX1272_wnetkey.o
 	g++ -lrt -lpthread lora_gateway.o arduPi.o SX1272_wnetkey.o -o lora_gateway_wnetkey	

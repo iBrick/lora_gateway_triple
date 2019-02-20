@@ -1,1 +1,1 @@
-{"status":"send_request","dst":6,"data":"reply from gw"}
+{"status":"send_request","dst":8,"data":"AAgNGJQD"}
