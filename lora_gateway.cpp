@@ -1526,6 +1526,7 @@ void loop(void)
   	if(enableDownlinkCheck) PRINT_CSTSTR("^$RNH: %s","EDC is true\n");
   	else PRINT_CSTSTR("^$RNH: %s","EDC is false\n");
 	  triggerDownlinkCheck=true;
+    enableDownlinkCheck=true;
 
 
 
