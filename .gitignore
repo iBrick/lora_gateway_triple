@@ -1,2 +1,3 @@
 *.o
 downlink/downlink-backup*
+*.pyc*
