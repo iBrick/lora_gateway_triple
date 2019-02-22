@@ -1737,7 +1737,14 @@ void loop(void)
 #else    				
     				// here we sent the downlink packet
     				//
-    				e = sx1272.sendPacketTimeout(document["dst"].GetInt(), (uint8_t*)document["data"].GetString(), document["data"].GetStringLength(), 10000);    
+            // Renha: we don't send MIC, so will alter only that call. //Also, design of original code is fragile.
+            // base64
+
+            uint8_t* tosend[256];
+            uint8_t tosend_len= base64_dec_len(document["data"].GetStringLength());
+            base64_decode(tosend, (uint8_t*)document["data"].GetString(), document["data"].GetStringLength());
+            
+    				e = sx1272.sendPacketTimeout(document["dst"].GetInt(), tosend, tosend_len, 10000);    
 #endif    				
     				
 					PRINT_CSTSTR("%s","Packet sent, state ");
@@ -1801,8 +1808,7 @@ void loop(void)
         	    	
         	lastDownlinkSendTime=millis();
         }
-    }	
-  	PRINT_CSTSTR("^$RNH: %s","Downlink code has been included\n");
+    }
 #endif
 } 
 
