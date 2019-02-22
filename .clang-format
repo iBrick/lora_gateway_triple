@@ -1,0 +1,8 @@
+BasedOnStyle: LLVM
+IndentWidth: 2
+---
+Language: Cpp
+AlignConsecutiveAssignments: true
+IndentCaseLabels: true
+IndentPPDirectives: AfterHash
+BinPackParameters: false
