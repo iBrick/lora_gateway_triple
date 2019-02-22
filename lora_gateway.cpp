@@ -1740,9 +1740,8 @@ void loop(void)
             // Renha: we don't send MIC, so will alter only that call. //Also, design of original code is fragile.
             // base64
 
-            uint8_t* tosend[256];
-            uint8_t tosend_len= base64_dec_len(document["data"].GetStringLength());
-            base64_decode(tosend, (uint8_t*)document["data"].GetString(), document["data"].GetStringLength());
+            uint8_t tosend[256];
+            uint8_t tosend_len= base64_decode((char*)tosend, (char*)document["data"].GetString(), document["data"].GetStringLength());
             
     				e = sx1272.sendPacketTimeout(document["dst"].GetInt(), tosend, tosend_len, 10000);    
 #endif    				
