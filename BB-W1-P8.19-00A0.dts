@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2015 Robert Nelson <robertcnelson@gmail.com>
  *
- * Virtual cape for onewire on connector pin P8.22
+ * Virtual cape for onewire on connector pin P8.19
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -19,13 +19,13 @@
 	compatible = "ti,beaglebone", "ti,beaglebone-black", "ti,beaglebone-green";
 
 	/* identification */
-	part-number = "BB-W1-P8.22";
+	part-number = "BB-W1-P8.19";
 	version = "00A0";
 
 	/* state the resources this cape uses */
 	exclusive-use =
 		/* the pin header uses */
-		"P8.22";
+		"P8.19";
 
 	/*
 	 * Free up the pins used by the cape from the pinmux helpers.
@@ -33,7 +33,7 @@
 	fragment@0 {
 		target = <&ocp>;
 		__overlay__ {
-			P8_22_pinmux { status = "disabled"; };
+			P8_19_pinmux { status = "disabled"; };
 		};
 	};
 
@@ -43,7 +43,7 @@
 
 			dallas_w1_pins: pinmux_dallas_w1_pins {
 				pinctrl-single,pins = < 
-					BONE_P8_22 0x37
+					BONE_P8_19 0x37
 				>;
 			};
 		};
@@ -59,7 +59,7 @@
 				pinctrl-0 = <&dallas_w1_pins>;
 
 				compatible = "w1-gpio";
-				gpios = <&gpio1 5 GPIO_ACTIVE_HIGH>;
+				gpios = <&gpio0 22 GPIO_ACTIVE_HIGH>;
 			};
 		};
 	};

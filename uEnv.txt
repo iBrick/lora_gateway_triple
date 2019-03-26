@@ -26,7 +26,7 @@ enable_uboot_overlays=1
 #dtb_overlay=/lib/firmware/BB-SPI1-SWP-01-00A0.dtbo
 #uboot_overlay_addr4=/lib/firmware/BB-I2C2-00A0.dtbo
 #dtb_overlay=/lib/firmware/BB-RTC.dtbo
-dtb_overlay=/lib/firmware/BB-W1-P8.22-00A0.dtbo
+dtb_overlay=/lib/firmware/BB-W1-P8.19-00A0.dtbo
 ###
 ###Disable auto loading of virtual capes (emmc/video/wireless/adc)
 disable_uboot_overlay_emmc=1
