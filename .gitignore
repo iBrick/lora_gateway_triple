@@ -2,3 +2,4 @@
 downlink
 *.pyc*
 .vscode/ipch
+log
