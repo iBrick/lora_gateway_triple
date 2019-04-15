@@ -1,4 +1,4 @@
 *.o
-downlink/*
+downlink
 *.pyc*
 .vscode/ipch
