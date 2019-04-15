@@ -401,7 +401,7 @@ uint32_t loraChannelArray[MAX_NB_CHANNEL] = {CH_00_433, CH_01_433, CH_02_433,
 
 ///////////////////////////////////////////////////////////////////
 // DEFAULT LORA MODE
-#define LORAMODE 1
+#define LORAMODE 3
 // the special mode to test BW=125MHz, CR=4/5, SF=12
 // on the 868.1MHz channel
 //#define LORAMODE 11
