@@ -4173,7 +4173,7 @@ boolean SX1272::availableData(uint16_t wait) {
     // long)wait) )
     // while ((bitRead(value, 4) == 0) && (millis() < exitTime)) {
     // RNH: value == 0x15 too often
-    while ((bitRead(value, 4) == 0) && (millis() < exitTime) && value != 0x15) {
+    while ((bitRead(value, 4) == 0) && (millis() < exitTime) && value == 0x15) {
       value = readRegister(REG_IRQ_FLAGS);
       // adding this small delay decreases the CPU load of the lora_gateway
       // process to 4~5% instead of nearly 100% suggested by rertini
