@@ -4185,7 +4185,8 @@ boolean SX1272::availableData(uint16_t wait) {
       //}
     } // end while (millis)
 
-    if (bitRead(value, 4) == 1) { // header received
+    // RNH: value == 0x15 too often
+    if (bitRead(value, 4) == 1 && value != 0x15) { // header received
 #if (SX1272_debug_mode > 0)
       printf("## Valid Header received in LoRa mode ##\n");
 #endif
@@ -4290,8 +4291,6 @@ boolean SX1272::availableData(uint16_t wait) {
     // if _rawFormat, accept all
     // if ((_destination == _nodeAddress) || (_destination == BROADCAST_0) ||
     // _rawFormat)
-    // RNH: debug
-    printf("IRQ register = 0x%x\n", value);
     // RNH: we don't need broadcast
     if ((_destination == _nodeAddress) || _rawFormat)
 #endif
