@@ -4290,6 +4290,8 @@ boolean SX1272::availableData(uint16_t wait) {
     // if _rawFormat, accept all
     // if ((_destination == _nodeAddress) || (_destination == BROADCAST_0) ||
     // _rawFormat)
+    // RNH: debug
+    printf("IRQ register = 0x%x\n", value);
     // RNH: we don't need broadcast
     if ((_destination == _nodeAddress) || _rawFormat)
 #endif
@@ -4297,8 +4299,6 @@ boolean SX1272::availableData(uint16_t wait) {
       forme = true;
 #if (SX1272_debug_mode > 0)
       printf("## Packet received is for me ##\n");
-      // RNH: debug
-      printf("Destination = 0x%x, raw format = 0x%x", _destination, _rawFormat);
 #endif
     } else {
       forme = false;
