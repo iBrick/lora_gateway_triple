@@ -4171,7 +4171,9 @@ boolean SX1272::availableData(uint16_t wait) {
     // Wait to ValidHeader interrupt
     // while( (bitRead(value, 4) == 0) && (millis() - previous < (unsigned
     // long)wait) )
-    while ((bitRead(value, 4) == 0) && (millis() < exitTime)) {
+    // while ((bitRead(value, 4) == 0) && (millis() < exitTime)) {
+    // RNH: value == 0x15 too often
+    while ((bitRead(value, 4) == 0) && (millis() < exitTime) && value != 0x15) {
       value = readRegister(REG_IRQ_FLAGS);
       // adding this small delay decreases the CPU load of the lora_gateway
       // process to 4~5% instead of nearly 100% suggested by rertini
@@ -4185,8 +4187,7 @@ boolean SX1272::availableData(uint16_t wait) {
       //}
     } // end while (millis)
 
-    // RNH: value == 0x15 too often
-    if (bitRead(value, 4) == 1 && value != 0x15) { // header received
+    if (bitRead(value, 4) == 1) { // header received
 #if (SX1272_debug_mode > 0)
       printf("## Valid Header received in LoRa mode ##\n");
 #endif
