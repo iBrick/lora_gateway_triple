@@ -4177,7 +4177,7 @@ boolean SX1272::availableData(uint16_t wait) {
       // process to 4~5% instead of nearly 100% suggested by rertini
       // (https://github.com/CongducPham/LowCostLoRaGw/issues/211) tests have
       // shown no side effects
-      delay(10);
+      delay(1);
       // Condition to avoid an overflow (DO NOT REMOVE)
       // if( millis() < previous )
       //{
