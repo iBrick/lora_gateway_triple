@@ -372,7 +372,9 @@ int xtoi(const char *hexstring);
 //#ifdef SENEGAL_REGULATION
 // uint8_t loraChannelIndex=0;
 //#else
-uint8_t loraChannelIndex = 7;
+// uint8_t loraChannelIndex = 7;
+// RNH: channel moved to CH_08_868 because of noise
+uint8_t loraChannelIndex = 4;
 //#endif
 uint32_t loraChannelArray[MAX_NB_CHANNEL] = {
     CH_04_868, CH_05_868, CH_06_868, CH_07_868, CH_08_868,
