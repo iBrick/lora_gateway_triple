@@ -42,7 +42,8 @@ SOFTWARE.
 #define NO_OF_BYTES 2
 
 /*Definitions specific to spidev1.0 */
-#define SPIDEV1_PATH "/dev/spidev0.0" // RNH: changed to 0.0 with kernel update
+// RNH: changed to 0.0 with kernel update
+#define SPIDEV1_PATH "/dev/spidev0.0"
 #define SPIDEV1_BUS_SPEED_HZ 100000
 
 /* Enum SPI Modes*/
