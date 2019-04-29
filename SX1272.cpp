@@ -31,8 +31,8 @@
 
 /*  CHANGE LOGS by C. Pham
  *	August 28th, 2018
- *		- add a small delay in the availableData() loop that decreases the
- *CPU load of the lora_gateway process to 4~5% instead of nearly 100%
+ *		- add a small delay in the availableData() loop that decreases
+ *the CPU load of the lora_gateway process to 4~5% instead of nearly 100%
  *		- suggested by rertini
  *(https://github.com/CongducPham/LowCostLoRaGw/issues/211) March 28th, 2018
  *		- check at packet reception that the packet type is correct,
@@ -3378,7 +3378,7 @@ int16_t SX1272::getRSSIpacket() { // RSSIpacket only exists in LoRa
       if (_SNR < 0) {
         // commented by C. Pham
         //_RSSIpacket = -NOISE_ABSOLUTE_ZERO + 10.0 * SignalBwLog[_bandwidth] +
-        //NOISE_FIGURE + ( double )_SNR;
+        // NOISE_FIGURE + ( double )_SNR;
 
         // added by C. Pham, using Semtech SX1272 rev3 March 2015
         // for SX1272 we use -139, for SX1276, we use -157
@@ -4288,14 +4288,16 @@ boolean SX1272::availableData(uint16_t wait) {
 #else
                     // modified by C. Pham
     // if _rawFormat, accept all
-    if ((_destination == _nodeAddress) || (_destination == BROADCAST_0) ||
-        _rawFormat)
+    // if ((_destination == _nodeAddress) || (_destination == BROADCAST_0) ||
+    // _rawFormat)
+    // RNH: we don't need broadcast
+    if ((_destination == _nodeAddress) || _rawFormat)
 #endif
     { // LoRa or FSK mode
       forme = true;
 #if (SX1272_debug_mode > 0)
       printf("## Packet received is for me ##\n");
-      // RNH: debug 
+      // RNH: debug
       printf("Destination = 0x%x, raw format = 0x%x", _destination, _rawFormat);
 #endif
     } else {
@@ -4546,8 +4548,8 @@ int8_t SX1272::getPacket(uint16_t wait) {
         }
         printf("\n");
         // printf("Retry number: ");
-        // printf("%d\n", packet_received.retry);			// Printing
-        // number retry
+        // printf("%d\n", packet_received.retry);			//
+        // Printing number retry
         printf(" ##\n");
         printf("\n");
 #endif
@@ -5163,8 +5165,8 @@ uint8_t SX1272::setPacket(uint8_t dest, char *payload) {
                     packet_sent.data[i]); // Writing the payload in FIFO
     }
     // commented by C. Pham
-    // writeRegister(REG_FIFO, packet_sent.retry);		// Writing the number retry
-    // in FIFO
+    // writeRegister(REG_FIFO, packet_sent.retry);		// Writing the
+    // number retry in FIFO
     state = 0;
 #if (SX1272_debug_mode > 0)
     printf("## Packet set and written in FIFO ##\n");
@@ -5186,8 +5188,8 @@ uint8_t SX1272::setPacket(uint8_t dest, char *payload) {
     }
     printf("\n");
     // printf("Retry number: ");
-    // printf("%d\n", packet_sent.retry);			// Printing number
-    // retry
+    // printf("%d\n", packet_sent.retry);			// Printing
+    // number retry
     printf(" ##\n");
     printf("\n");
 #endif
@@ -5300,8 +5302,8 @@ uint8_t SX1272::setPacket(uint8_t dest, uint8_t *payload) {
                     packet_sent.data[i]); // Writing the payload in FIFO
     }
     // commented by C. Pham
-    // writeRegister(REG_FIFO, packet_sent.retry);		// Writing the number retry
-    // in FIFO
+    // writeRegister(REG_FIFO, packet_sent.retry);		// Writing the
+    // number retry in FIFO
     state = 0;
 #if (SX1272_debug_mode > 0)
     printf("## Packet set and written in FIFO ##\n");
@@ -5323,8 +5325,8 @@ uint8_t SX1272::setPacket(uint8_t dest, uint8_t *payload) {
     }
     printf("\n");
     // printf("Retry number: ");
-    // printf("%d\n", packet_sent.retry);			// Printing number
-    // retry
+    // printf("%d\n", packet_sent.retry);			// Printing
+    // number retry
     printf(" ##\n");
     printf("\n");
 #endif
