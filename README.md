@@ -57,11 +57,11 @@ Run commands:
 
 При необходимости установите пользователю пароль и/или ключи доступа.
 
-sudo adduser pi
+	sudo adduser pi
 
-	password: raspberry
+		password: raspberry
 
-sudo usermod -aG sudo pi
+	sudo usermod -aG sudo pi
 
 Получение исходного кода
 ------------------------
@@ -72,15 +72,15 @@ sudo usermod -aG sudo pi
 
 Login as user 'pi'
 
-git clone https://github.com/iBrick/lora_gateway_triple.git
+	git clone https://github.com/iBrick/lora_gateway_triple.git
 
-mv lora_gateway_triple/ lora_gateway
+	mv lora_gateway_triple/ lora_gateway
 
-cd lora_gateway/
+	cd lora_gateway/
 
-mkdir downlink
+	mkdir downlink
 
-mkdir log
+	mkdir log
 
 Конфигурация аппаратного обеспечения 
 ------------------------------------
@@ -91,13 +91,13 @@ mkdir log
 
 После этого требуется перезагрузить устройство командой `sudo reboot`.
 
-sudo cp BB-W1-P8.19-00A0.dtbo /lib/firmware/
+	sudo cp BB-W1-P8.19-00A0.dtbo /lib/firmware/
 
-sudo nano /boot/uEnv.txt
+	sudo nano /boot/uEnv.txt
 
-	add line in section 'Custom Cape': dtb_overlay=/lib/firmware/BB-W1-P8.19-00A0.dtbo
+		add line in section 'Custom Cape': dtb_overlay=/lib/firmware/BB-W1-P8.19-00A0.dtbo
 
-	uncomment lines: 'disable_uboot_overlay_audio=1' and 'disable_uboot_overlay_adc=1'
+		uncomment lines: 'disable_uboot_overlay_audio=1' and 'disable_uboot_overlay_adc=1'
 
 Установка дополнительного программного обеспечения
 --------------------------------------------------
@@ -109,102 +109,102 @@ sudo nano /boot/uEnv.txt
 
 - модули для python2: `python-requests`
 
-sudo apt install python3 python3-gi python3-click python3-gi-cairo python3-cairo gir1.2-gtk-3.0 python3-sqlalchemy python3-psycopg2 python-requests -y
+	sudo apt install python3 python3-gi python3-click python3-gi-cairo python3-cairo gir1.2-gtk-3.0 python3-sqlalchemy python3-psycopg2 python-requests -y
 
-Java installation
+	Java installation
 
-sudo apt-get install linux-headers-`uname -r`
+	sudo apt-get install linux-headers-`uname -r`
 
-sudo update-initramfs -uk `uname -r`
+	sudo update-initramfs -uk `uname -r`
 
-scp copy to BBB file jdk-8u211-linux-arm32-vfp-hflt.tar.gz
+	scp copy to BBB file jdk-8u211-linux-arm32-vfp-hflt.tar.gz
 
-sudo sudo tar xvzf jdk-8u211-linux-arm32-vfp-hflt.tar.gz -C /usr
+	sudo sudo tar xvzf jdk-8u211-linux-arm32-vfp-hflt.tar.gz -C /usr
 
-sudo rm /usr/jdk1.8.0_211/src.zip
+	sudo rm /usr/jdk1.8.0_211/src.zip
 
-sudo nano ~/.bash_profile
+	sudo nano ~/.bash_profile
 
-	#add lines:
+		#add lines:
 
-	export JAVA_HOME=/usr/jdk1.8.0_211
+		export JAVA_HOME=/usr/jdk1.8.0_211
 
-	export PATH=$PATH:$JAVA_HOME/bin
+		export PATH=$PATH:$JAVA_HOME/bin
 
-source ~/.bash_profile
+	source ~/.bash_profile
 
 WiFi настройка
 --------------------------------------------------
-sudo connmanctl
+	sudo connmanctl
 
-connmanctl> enable wifi
+	connmanctl> enable wifi
 
-connmanctl> tether wifi disable
+	connmanctl> tether wifi disable
 
-connmanctl> scan wifi
+	connmanctl> scan wifi
 
-connmanctl> services
+	connmanctl> services
 
-connmanctl> agent on
+	connmanctl> agent on
 
-connmanctl> connect wifi_<long name>_managed_psk 
+	connmanctl> connect wifi_<long name>_managed_psk 
 
-Passphrase? your_password
+	Passphrase? your_password
 
-connmanctl> quit
+	connmanctl> quit
 
 MQTTClientLoRa установка и настройка
 --------------------------------------------------
-Upload MQTTClientLoRa-1.0-SNAPSHOT.zip to home directory
+	Upload MQTTClientLoRa-1.0-SNAPSHOT.zip to home directory
 
-unzip MQTTClientLoRa-1.0-SNAPSHOT.zip
+	unzip MQTTClientLoRa-1.0-SNAPSHOT.zip
 
-mv MQTTClientLoRa-1.0-SNAPSHOT MQTTClientLoRa
+	mv MQTTClientLoRa-1.0-SNAPSHOT MQTTClientLoRa
 
-sudo -u postgres psql
+	sudo -u postgres psql
 
-Run scripts from 4 files: https://github.com/iBrick/SW_igla_MQTTClient/blob/master/migrations/ 
+	Run scripts from 4 files: https://github.com/iBrick/SW_igla_MQTTClient/blob/master/migrations/ 
 
-Upload file https://github.com/iBrick/SW_igla_MQTTClient/blob/master/mqttclient.service to BBB. Change JAVA_HOME to /usr/jdk1.8.0_211/
+	Upload file https://github.com/iBrick/SW_igla_MQTTClient/blob/master/mqttclient.service to BBB. Change JAVA_HOME to /usr/jdk1.8.0_211/
 
-sudo mv mqttclient.service /etc/systemd/system
+	sudo mv mqttclient.service /etc/systemd/system
 
-sudo systemctl daemon-reload
+	sudo systemctl daemon-reload
 
-sudo systemctl enable mqttclient
+	sudo systemctl enable mqttclient
 
-sudo systemctl start mqttclient
+	sudo systemctl start mqttclient
 
 Активация GUI
 --------------------------------------------------
-sudo apt install xorg
+	sudo apt install xorg
 
-sudo nano /etc/rc.local
+	sudo nano /etc/rc.local
 
-    add text: su -s /bin/bash -c startx your_user(pi) &
+		add text: su -s /bin/bash -c startx your_user(pi) &
 
-sudo dpkg-reconfigure x11-common
+	sudo dpkg-reconfigure x11-common
 
-sudo nano /etc/X11/Xwrapper.config and change allowed_users=console to allowed_users=anybody.
+	sudo nano /etc/X11/Xwrapper.config and change allowed_users=console to allowed_users=anybody.
 
-sudo nano /etc/X11/xinit/xinitrc
+	sudo nano /etc/X11/xinit/xinitrc
 
-	put a # in front off the line containing
+		put a # in front off the line containing
 
-	. /etc/X11/Xsession
-	
+		. /etc/X11/Xsession
+		
 
-sudo nano ~pi/.xinitrc
+	sudo nano ~pi/.xinitrc
 
-    put: /usr/bin/python3 /home/pi/igla-gui/igla-gui.py
+		put: /usr/bin/python3 /home/pi/igla-gui/igla-gui.py
     
 Internet over USB
 --------------------------------------------------
-sudo /sbin/route add default gw 192.168.7.1
+	sudo /sbin/route add default gw 192.168.7.1
 
-echo "nameserver 8.8.8.8" >> /etc/resolv.conf
+	echo "nameserver 8.8.8.8" >> /etc/resolv.conf
 
-или выполнить скрипт getinternetfromusb.sh из директории lora_gateway
+	или выполнить скрипт getinternetfromusb.sh из директории lora_gateway
 
 Запуск устройства вручную
 =========================
