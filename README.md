@@ -5,13 +5,17 @@
 ------------
 Запишите на карту памяти новейший доступный дистрибутив ОС версии IoT Debian, и проведите обновление до последней
 версии, всё это производите в соответствии с инструкциями производителя платы beaglebone.
+
 Login as debian / temppwd
+
 Install new kernel:
 	cd /opt/scripts/tools/
 	sudo ./update_kernel.sh --lts-4_19
+
 Remove old kernel:
 	dpkg --list | grep linux-image
 	sudo apt-get purge linux-image-x.x.x.x-xyz
+
 Run commands:
 	sudo apt-get update
 	sudo apt-get upgrade
@@ -23,6 +27,7 @@ Run commands:
 	sudo ./install.sh
 	sudo apt install postgresql psmisc -y 
 	sudo apt install mosquitto mosquitto-clients -y
+
 	sudo nano /etc/postgresql/9.6/main/pg_hba.conf
 		change line ("local" is for Unix domain socket connections only)
 		local   all             all                                     md5
