@@ -35,6 +35,9 @@
 
 - MQTT: `mosquitto`, `mosquitto-clients`
 
+- killall: `psmisc`
+
+- модули для python2: `python-requests`
 
 Запуск устройства вручную
 =========================
