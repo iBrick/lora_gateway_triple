@@ -197,6 +197,9 @@ MQTTClientLoRa установка и настройка
 	sudo nano ~pi/.xinitrc
 
 		put: /usr/bin/python3 /home/pi/igla-gui/igla-gui.py
+		
+	download Igla GUI git repository to /home/pi: 
+	https://github.com/Renha/igla-gui 
     
 Internet over USB
 --------------------------------------------------
