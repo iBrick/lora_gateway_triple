@@ -109,9 +109,9 @@ Login as user 'pi'
 
 - модули для python2: `python-requests`
 
-	sudo apt install python3 python3-gi python3-click python3-gi-cairo python3-cairo gir1.2-gtk-3.0 python3-sqlalchemy python3-psycopg2 python-requests -y
+		sudo apt install python3 python3-gi python3-click python3-gi-cairo python3-cairo gir1.2-gtk-3.0 python3-sqlalchemy python3-psycopg2 python-requests -y
 
-	Java installation
+Java installation
 
 	sudo apt-get install linux-headers-`uname -r`
 
