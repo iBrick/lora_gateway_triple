@@ -1308,69 +1308,6 @@ while True:
 					_validappkey=1				
 				
 			continue	
-					
-					
-		if (ch >= '\x50' and ch <= '\x54'):
-			print "--> got image packet"
-			
-			cam_id=ord(ch)-0x50;
-			src_addr_msb = ord(getSingleChar())
-			src_addr_lsb = ord(getSingleChar())
-			src_addr = src_addr_msb*256+src_addr_lsb
-					
-			seq_num = ord(getSingleChar())
-	
-			Q = ord(getSingleChar())
-	
-			data_len = ord(getSingleChar())
-	
-			if (src_addr in nodeL):
-				#already in list
-				#get the file handler
-				theFile=fileH[src_addr]
-				#TODO
-				#start some timer to remove the node from nodeL
-			else:
-				#new image packet from this node
-				nodeL.append(src_addr)
-				filename =(_folder_path+"images/ucam_%d-node_%.4d-cam_%d-Q%d.dat" % (imgSN,src_addr,cam_id,Q))
-				print "first pkt from node %d" % src_addr
-				print "creating file %s" % filename
-				theFile=open(os.path.expanduser(filename),"w")
-				#associates the file handler to this node
-				fileH.update({src_addr:theFile})
-				#and associates imageFilename, imagSN,Q and cam_id
-				imageFilenameA.update({src_addr:filename})
-				imgsnA.update({src_addr:imgSN})
-				qualityA.update({src_addr:Q})
-				camidA.update({src_addr:cam_id})
-				imgSN=imgSN+1
-				t = Timer(90, image_timeout)
-				t.start()
-				#log only the first packet and the filename
-				f=open(os.path.expanduser(_imagelog_filename),"a")
-				f.write(info_str+' ')	
-				now = datetime.datetime.now()
-				f.write(now.isoformat()+'> ')
-				f.write(filename+'\n')
-				f.close()				
-							
-			print "pkt %d from node %d data size is %d" % (seq_num,src_addr,data_len)
-			print "write to file"
-			
-			theFile.write(format(data_len, '04X')+' ')
-	
-			for i in range(1, data_len):
-				ch=getSingleChar()
-				#sys.stdout.write(hex(ord(ch)))
-				#sys.stdout.buffer.write(ch)
-				print (hex(ord(ch))),
-				theFile.write(format(ord(ch), '02X')+' ')
-				
-			print "End"
-			sys.stdout.flush()
-			theFile.flush()
-			continue
 			
 	if (ch == '?' and _ignoreComment==1):
 		sys.stdin.readline()
