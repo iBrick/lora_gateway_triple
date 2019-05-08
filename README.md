@@ -48,6 +48,10 @@ Run commands:
 		
 		local   all             all                                     md5
 		host    all             all              0.0.0.0/0                       md5
+		
+	sudo nano /etc/postgresql/9.6/main/postgres.conf
+		
+		change line #listen_addresses = 'localhost' -> listen_addresses = '*'
 
 		
 		
