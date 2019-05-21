@@ -182,7 +182,7 @@ def main(ldata, pdata, rdata, tdata, gwid):
         # RNH: we don't need no any syntax
         if True:
             MQTT_uploadData('', ['', 'uplink', ldata],
-                            SNR + ',' + RSSI, tdata)
+                            str(SNR) + ',' + str(RSSI), tdata)
 
         # LoRaWAN (so encrypted packet)
         # or encapsulated encrypted
