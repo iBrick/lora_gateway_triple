@@ -3,3 +3,5 @@ downlink
 *.pyc*
 .vscode/ipch
 log
+LoRaWAN/.pyc
+.pyc

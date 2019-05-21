@@ -1,6 +1,6 @@
 #Docs: http://elinux.org/Beagleboard:U-boot_partitioning_layout_2.0
 
-uname_r=4.14.103-ti-r98
+uname_r=4.19.31-ti-r18
 #uuid=
 #dtb=
 
@@ -23,17 +23,14 @@ enable_uboot_overlays=1
 ###
 ###Custom Cape
 #dtb_overlay=/lib/firmware/<file8>.dtbo
-#dtb_overlay=/lib/firmware/BB-SPI1-SWP-01-00A0.dtbo
-#uboot_overlay_addr4=/lib/firmware/BB-I2C2-00A0.dtbo
-#dtb_overlay=/lib/firmware/BB-RTC.dtbo
-dtb_overlay=/lib/firmware/BB-W1-P8.19-00A0.dtbo
 ###
 ###Disable auto loading of virtual capes (emmc/video/wireless/adc)
-disable_uboot_overlay_emmc=1
+#disable_uboot_overlay_emmc=1
 #disable_uboot_overlay_video=1
-#disable_uboot_overlay_audio=1
+disable_uboot_overlay_audio=1
 #disable_uboot_overlay_wireless=1
 disable_uboot_overlay_adc=1
+dtb_overlay=/lib/firmware/BB-W1-P8.19-00A0.dtbo
 ###
 ###PRUSS OPTIONS
 ###pru_rproc (4.4.x-ti kernel)
