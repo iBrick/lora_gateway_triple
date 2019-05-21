@@ -98,12 +98,10 @@ Login as user 'pi'
 
 	sudo cp BB-W1-P8.19-00A0.dtbo /lib/firmware/
 
-	sudo nano /boot/uEnv.txt
-
-		add line in section 'Custom Cape': dtb_overlay=/lib/firmware/BB-W1-P8.19-00A0.dtbo
-
-		uncomment lines: 'disable_uboot_overlay_audio=1' and 'disable_uboot_overlay_adc=1'
-
+	sudo cp uEnv.txt /boot/
+	
+	sudo reboot
+	
 Установка дополнительного программного обеспечения
 --------------------------------------------------
 Установите следующие программные компоненты:
