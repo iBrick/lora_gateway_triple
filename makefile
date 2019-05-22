@@ -1,8 +1,10 @@
 include radio.makefile
 
-module0 = -DSX1272_RST=9 -DSX1272_SS=7 -DSX1272_NSS1=2 -DSX1272_NSS2=5 -DMODULE=0 -DSX1272_debug_mode=1
-module1 = -DSX1272_RST=3 -DSX1272_SS=2 -DSX1272_NSS1=7 -DSX1272_NSS2=5 -DMODULE=1 -DSX1272_debug_mode=0
-module2 = -DSX1272_RST=4 -DSX1272_SS=5 -DSX1272_NSS1=7 -DSX1272_NSS2=2 -DMODULE=2 -DSX1272_debug_mode=0
+module0 = -DSX1272_RST=9 -DSX1272_SS=7 -DSX1272_NSS1=2 -DSX1272_NSS2=5 -DMODULE=0 -DSX1272_debug_mode=0 -DloraChannelIndex=4
+module1 = -DSX1272_RST=3 -DSX1272_SS=2 -DSX1272_NSS1=7 -DSX1272_NSS2=5 -DMODULE=1 -DSX1272_debug_mode=0 -DloraChannelIndex=6
+module2 = -DSX1272_RST=4 -DSX1272_SS=5 -DSX1272_NSS1=7 -DSX1272_NSS2=2 -DMODULE=2 -DSX1272_debug_mode=0 -DloraChannelIndex=8
+
+lora_gateway_bb_all_modules: lora_gateway_bb_module0 lora_gateway_bb_module1 lora_gateway_bb_module2
 
 GPIO.o: GPIO.cpp GPIO.h
 	g++ -lrt -lpthread -c GPIO.cpp -o GPIO.o
@@ -14,8 +16,6 @@ Base64.o: Base64.h Base64.cpp
 	g++ -lrt -lpthread -c Base64.cpp -o Base64.o
 
 lora_gateway_pi2_all_modules: lora_gateway_pi2_module0 lora_gateway_pi2_module1 lora_gateway_pi2_module2
-
-lora_gateway_bb_all_modules: lora_gateway_bb_module0 lora_gateway_bb_module1 lora_gateway_bb_module2
 
 lora_gateway: lora_gateway.o arduPi.o SX1272.o
 	g++ -lrt -lpthread lora_gateway.o arduPi.o SX1272.o -o lora_gateway	
@@ -39,14 +39,14 @@ lora_gateway_bb: lora_gateway_bb.o Base64.o arduPi_bb.o SX1272_bb.o
 	rm -f lora_gateway
 	ln -s lora_gateway_bb ./lora_gateway
 
-lora_gateway_bb_module0: lora_gateway_bb.o arduPi_bb.o SX1272_bb_module0.o SPI.o GPIO.o Base64.o
-	g++ -lrt -lpthread SPI.o GPIO.o lora_gateway_bb.o Base64.o arduPi_bb.o SX1272_bb_module0.o -o lora_gateway_bb_module0
+lora_gateway_bb_module0: lora_gateway_bb_module0.o arduPi_bb.o SX1272_bb_module0.o SPI.o GPIO.o Base64.o
+	g++ -lrt -lpthread SPI.o GPIO.o lora_gateway_bb_module0.o Base64.o arduPi_bb.o SX1272_bb_module0.o -o lora_gateway_bb_module0
 
-lora_gateway_bb_module1: lora_gateway_bb_downlink.o arduPi_bb.o SX1272_bb_module1.o SPI.o GPIO.o Base64.o
-	g++ -lrt -lpthread SPI.o GPIO.o lora_gateway_bb_downlink.o Base64.o arduPi_bb.o SX1272_bb_module1.o -o lora_gateway_bb_module1
+lora_gateway_bb_module1: lora_gateway_bb_module1.o arduPi_bb.o SX1272_bb_module1.o SPI.o GPIO.o Base64.o
+	g++ -lrt -lpthread SPI.o GPIO.o lora_gateway_bb_module1.o Base64.o arduPi_bb.o SX1272_bb_module1.o -o lora_gateway_bb_module1
 
-lora_gateway_bb_module2: lora_gateway_bb.o arduPi_bb.o SX1272_bb_module2.o SPI.o GPIO.o Base64.o
-	g++ -lrt -lpthread SPI.o GPIO.o lora_gateway_bb.o Base64.o arduPi_bb.o SX1272_bb_module2.o -o lora_gateway_bb_module2
+lora_gateway_bb_module2: lora_gateway_bb_module2.o arduPi_bb.o SX1272_bb_module2.o SPI.o GPIO.o Base64.o
+	g++ -lrt -lpthread SPI.o GPIO.o lora_gateway_bb_module2.o Base64.o arduPi_bb.o SX1272_bb_module2.o -o lora_gateway_bb_module2
 
 lora_gateway_wnetkey: lora_gateway.o arduPi.o SX1272_wnetkey.o
 	g++ -lrt -lpthread lora_gateway.o arduPi.o SX1272_wnetkey.o -o lora_gateway_wnetkey	
@@ -70,10 +70,20 @@ lora_gateway_pi2_downlink: lora_gateway_pi2_downlink.o arduPi_pi2.o SX1272_pi2.o
 	rm -f lora_gateway
 	ln -s lora_gateway_pi2_downlink ./lora_gateway
 	
-lora_gateway_bb_downlink: Base64.o lora_gateway_bb_downlink.o arduPi_bb.o SX1272_bb.o
-	g++ -lrt -lpthread lora_gateway_bb_downlink.o Base64.o arduPi_bb.o SX1272_bb.o -o lora_gateway_bb_downlink
-	rm -f lora_gateway
-	ln -s lora_gateway_bb_downlink ./lora_gateway
+lora_gateway_bb_downlink_module0: Base64.o lora_gateway_bb_downlink_module0.o arduPi_bb.o SX1272_bb.o
+	g++ -lrt -lpthread lora_gateway_bb_downlink_module0.o Base64.o arduPi_bb.o SX1272_bb_module0.o -o lora_gateway_bb_downlink_module0
+	rm -f lora_gateway_bb_module0
+	ln -s lora_gateway_bb_downlink_module0 ./lora_gateway_bb_module0
+	
+lora_gateway_bb_downlink_module1: Base64.o lora_gateway_bb_downlink_module1.o arduPi_bb.o SX1272_bb.o
+	g++ -lrt -lpthread lora_gateway_bb_downlink_module1.o Base64.o arduPi_bb.o SX1272_bb_module1.o -o lora_gateway_bb_downlink_module1
+	rm -f lora_gateway_bb_module1
+	ln -s lora_gateway_bb_downlink_module1 ./lora_gateway_bb_module1
+	
+lora_gateway_bb_downlink_module2: Base64.o lora_gateway_bb_downlink_module2.o arduPi_bb.o SX1272_bb.o
+	g++ -lrt -lpthread lora_gateway_bb_downlink_module2.o Base64.o arduPi_bb.o SX1272_bb_module2.o -o lora_gateway_bb_downlink_module2
+	rm -f lora_gateway_bb_module2
+	ln -s lora_gateway_bb_downlink_module2 ./lora_gateway_bb_module2
 	
 lora_gateway.o: lora_gateway.cpp radio.makefile gateway_conf.json
 	g++ $(CFLAGS) -DRASPBERRY -DIS_RCV_GATEWAY -c lora_gateway.cpp -o lora_gateway.o
@@ -81,8 +91,14 @@ lora_gateway.o: lora_gateway.cpp radio.makefile gateway_conf.json
 lora_gateway_pi2.o: lora_gateway.cpp radio.makefile gateway_conf.json
 	g++ $(CFLAGS) -DRASPBERRY -DRASPBERRY2 -DIS_RCV_GATEWAY -c lora_gateway.cpp -o lora_gateway_pi2.o
 
-lora_gateway_bb.o: lora_gateway.cpp radio.makefile gateway_conf.json
-	g++ $(CFLAGS) -DRASPBERRY -DBEAGLEBONE -DIS_RCV_GATEWAY -c lora_gateway.cpp -o lora_gateway_bb.o
+lora_gateway_bb_module0.o: lora_gateway.cpp radio.makefile gateway_conf.json
+	g++ $(CFLAGS) -DRASPBERRY $(module0) -DBEAGLEBONE -DIS_RCV_GATEWAY -c lora_gateway.cpp -o lora_gateway_bb_module0.o
+
+lora_gateway_bb_module1.o: lora_gateway.cpp radio.makefile gateway_conf.json
+	g++ $(CFLAGS) -DRASPBERRY $(module1) -DBEAGLEBONE -DIS_RCV_GATEWAY -c lora_gateway.cpp -o lora_gateway_bb_module1.o
+
+lora_gateway_bb_module2.o: lora_gateway.cpp radio.makefile gateway_conf.json
+	g++ $(CFLAGS) -DRASPBERRY $(module2) -DBEAGLEBONE -DIS_RCV_GATEWAY -c lora_gateway.cpp -o lora_gateway_bb_module2.o
 
 lora_gateway_winput.o: lora_gateway.cpp radio.makefile gateway_conf.json
 	g++ $(CFLAGS) -DRASPBERRY -DIS_RCV_GATEWAY -DWINPUT -c lora_gateway.cpp -o lora_gateway_winput.o
@@ -96,8 +112,14 @@ lora_gateway_downlink.o: lora_gateway.cpp radio.makefile gateway_conf.json
 lora_gateway_pi2_downlink.o: lora_gateway.cpp radio.makefile gateway_conf.json
 	g++ $(CFLAGS) -DRASPBERRY -DRASPBERRY2 -DIS_RCV_GATEWAY -DDOWNLINK -c lora_gateway.cpp -o lora_gateway_pi2_downlink.o
 
-lora_gateway_bb_downlink.o: lora_gateway.cpp radio.makefile gateway_conf.json
-	g++ $(CFLAGS) -DRASPBERRY -DBEAGLEBONE -DIS_RCV_GATEWAY -DDOWNLINK -c lora_gateway.cpp -o lora_gateway_bb_downlink.o
+lora_gateway_bb_downlink_module0.o: lora_gateway.cpp radio.makefile gateway_conf.json
+	g++ $(CFLAGS) -DRASPBERRY $(module0) -DBEAGLEBONE -DIS_RCV_GATEWAY -DDOWNLINK -c lora_gateway.cpp -o lora_gateway_bb_downlink_module0.o
+
+lora_gateway_bb_downlink_module1.o: lora_gateway.cpp radio.makefile gateway_conf.json
+	g++ $(CFLAGS) -DRASPBERRY $(module1) -DBEAGLEBONE -DIS_RCV_GATEWAY -DDOWNLINK -c lora_gateway.cpp -o lora_gateway_bb_downlink_module1.o
+
+lora_gateway_bb_downlink_module2.o: lora_gateway.cpp radio.makefile gateway_conf.json
+	g++ $(CFLAGS) -DRASPBERRY $(module2) -DBEAGLEBONE -DIS_RCV_GATEWAY -DDOWNLINK -c lora_gateway.cpp -o lora_gateway_bb_downlink_module2.o
 
 arduPi.o: arduPi.cpp arduPi.h
 	g++ -c arduPi.cpp -o arduPi.o	
