@@ -374,11 +374,11 @@ int xtoi(const char *hexstring);
 //#else
 // uint8_t loraChannelIndex = 7;
 // RNH: channel moved to CH_08_868 because of noise
-// uint8_t loraChannelIndex = 4;
 // RNH: channel set in makefile, if not, default to 4 (08)
-#  ifndef loraChannelIndex
-#    define loraChannelIndex (4)
+#  ifndef LCI
+#    define LCI (4)
 #  endif
+uint8_t loraChannelIndex = LCI;
 //#endif
 uint32_t loraChannelArray[MAX_NB_CHANNEL] = {
     CH_04_868, CH_05_868, CH_06_868, CH_07_868, CH_08_868,
