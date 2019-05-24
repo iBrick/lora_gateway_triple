@@ -162,6 +162,52 @@ WiFi настройка
 
 	connmanctl> quit
 
+3G - модем
+----------
+Из домашней директории пользователя pi:
+	
+	mkdir modem
+	
+	wget http://zool33.uni-graz.at/petz/umtskeeper/src/umtskeeper.tar.gz
+	
+	cd modem
+	
+	tar -xzf ../umtskeeper.tar.gz && rm ../umtskeeper.tar.gz
+	
+	nano umtskeeper.conf
+
+вписываем содержимое:
+
+	conf['deviceName'] = 'ZTE'
+
+	conf['sakisOperators'] = "USBINTERFACE='3' OTHER='USBMODEM' MODEM='OTHER' USBMODEM='19d2:0167' APN='wap.tele2.ru'"
+	
+далее открываем файл:
+	
+	sudo nano /etc/systemd/system/umtskeeper.service
+	
+вписываем содержимое:
+
+	[Unit]
+	
+	Description=UMTS Keeper
+
+	[Service]
+	
+	ExecStart=/home/pi/modem/umtskeeper --conf /home/pi/modem/umtskeeper.conf
+	
+	ExecStop=/home/pi/modem/umtskeeper stop
+	
+	[Install]
+	
+	WantedBy=network.target
+	
+	Alias=umtskeeper.service
+
+наконец выполняем:
+
+	sudo systemctl start umtskeeper
+
 MQTTClientLoRa установка и настройка
 --------------------------------------------------
 	Upload MQTTClientLoRa-1.0-SNAPSHOT.zip to home directory
