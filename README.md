@@ -1,6 +1,12 @@
 Первоначальная настройка устройства:
 ====================================
 
+Перенос настроенной системы Базового блока на новый экземпляр
+------------
+Операционная система предоставляет скрипт для создания загрузочного образа с рабочего микрокомпьютера на microSD карту. Для этого  вставьте пустую SD карту размером не менее 4 Гб и выполните:  /opt/scripts/tools/eMMC/beaglebone-black-make-microSD-flasher-from-eMMC.sh
+Команда записывает образ eMMC на microSD таким образом, что последняя становится "прошивальщиком" для других микрокомпьютеров BeagleBone, их eMMC памяти.
+После выполнения скрипта завершите работу системы, извлеките microSD карту. Вставьте в новый микрокомпьютер до включения, зажмите кнопку User2, подключите питание и подождите 10 секунд до включения светодиодов USR1-4. После чего дождитесь окончания прошивки (до 30 минут), пока светодиоды не погаснут.
+
 Установка ОС
 ------------
 Запишите на карту памяти новейший доступный дистрибутив ОС версии IoT Debian, и проведите обновление до последней
@@ -106,6 +112,8 @@ Login as user 'pi'
 --------------------------------------------------
 Установите следующие программные компоненты:
 
+- GPS: `gpsd`, `gpsd-clients`
+
 - MQTT: `mosquitto`, `mosquitto-clients`
 
 - killall: `psmisc`
@@ -155,6 +163,59 @@ WiFi настройка
 	Passphrase? your_password
 
 	connmanctl> quit
+
+GPS - приёмник
+--------------
+Требует предварительно запущенного скрипта `config-board` для настройки портов ввода-вывода.
+Также необходимо выполнить настройку сервиса, в файле `/etc/default/gpsd` указав:
+
+	DEVICES="/dev/ttyS4"
+
+3G - модем
+----------
+Из домашней директории пользователя pi:
+	
+	mkdir modem
+	
+	wget http://zool33.uni-graz.at/petz/umtskeeper/src/umtskeeper.tar.gz
+	
+	cd modem
+	
+	tar -xzf ../umtskeeper.tar.gz && rm ../umtskeeper.tar.gz
+	
+	nano umtskeeper.conf
+
+вписываем содержимое:
+
+	conf['deviceName'] = 'ZTE'
+
+	conf['sakisOperators'] = "USBINTERFACE='3' OTHER='USBMODEM' MODEM='OTHER' USBMODEM='19d2:0167' APN='wap.tele2.ru'"
+	
+далее открываем файл:
+	
+	sudo nano /etc/systemd/system/umtskeeper.service
+	
+вписываем содержимое:
+
+	[Unit]
+	
+	Description=UMTS Keeper
+
+	[Service]
+	
+	ExecStart=/home/pi/modem/umtskeeper --conf /home/pi/modem/umtskeeper.conf
+	
+	ExecStop=/home/pi/modem/umtskeeper stop
+	
+	[Install]
+	
+	WantedBy=network.target
+	
+	Alias=umtskeeper.service
+
+наконец выполняем:
+
+	sudo systemctl start umtskeeper
 
 MQTTClientLoRa установка и настройка
 --------------------------------------------------
