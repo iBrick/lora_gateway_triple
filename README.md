@@ -112,6 +112,8 @@ Login as user 'pi'
 --------------------------------------------------
 Установите следующие программные компоненты:
 
+- GPS: `gpsd`, `gpsd-clients`
+
 - MQTT: `mosquitto`, `mosquitto-clients`
 
 - killall: `psmisc`
