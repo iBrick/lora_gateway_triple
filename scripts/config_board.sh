@@ -66,6 +66,10 @@ do
         echo 1 > /sys/class/gpio/gpio${OPN}/value
 done
 
+# setting up GPS module
+gpsctl -n /dev/ttyS4
+#TODO: set up time from GPS too
+
 if [ ! -e "/dev/rtc1" ]; then
 	echo "no external RTC module registered, registering..."
 	echo ds1307 0x68 >/sys/bus/i2c/devices/i2c-2/new_device
