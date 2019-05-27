@@ -67,7 +67,7 @@ do
 done
 
 # setting up GPS module
-gpsctl -n /dev/ttyS4
+#gpsctl -n /dev/ttyS4
 #TODO: set up time from GPS too
 
 if [ ! -e "/dev/rtc1" ]; then
