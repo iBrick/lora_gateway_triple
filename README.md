@@ -114,7 +114,7 @@ Login as user 'pi'
 
 - GPS: `gpsd`, `gpsd-clients`
 
-- MQTT: `mosquitto`, `mosquitto-clients`
+- MQTT: `mosquitto`, `mosquitto-clients`, `python3-paho-mqtt`
 
 - killall: `psmisc`
 
