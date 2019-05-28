@@ -47,6 +47,8 @@ Run commands:
 	sudo apt install postgresql psmisc -y 
 	
 	sudo apt install mosquitto mosquitto-clients -y
+	
+	sudo pip3 install paho-mqtt
 
 	sudo nano /etc/postgresql/9.6/main/pg_hba.conf
 		
