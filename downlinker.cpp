@@ -43,8 +43,6 @@ void startConfig() {
 
   e = sx1272.setMode(loraMode);
 
-  SIFS_cad_number = 3;
-
   e = sx1272.setChannel(loraChannel);
 
 #ifdef PABOOST
@@ -80,7 +78,7 @@ int setup() {
 char fromfile[2048];
 char decoded[256];
 void loop(void) {
-  fp = fopen("/home/pi/lora_gateway/downlink/downlink.txt", "r");
+  file *fp = fopen("/home/pi/lora_gateway/downlink/downlink.txt", "r");
   if (fp) {
     fseek(fp, 0, SEEK_END);
     int size_fromfile = ftell(fp);
@@ -95,8 +93,8 @@ void loop(void) {
         size_fromfile--;
 
       if (size_fromfile) {
-        int size_decoded = base64_decode(*decoded, *fromfile, size_fromfile);
-        sx1272.sendPacketMAXTimeout(255, *decoded, size_decoded);
+        int size_decoded = base64_decode(decoded, fromfile, size_fromfile);
+        sx1272.sendPacketMAXTimeout(255, decoded, size_decoded);
 
         remove("/home/pi/lora_gateway/downlink/downlink.txt");
       }
