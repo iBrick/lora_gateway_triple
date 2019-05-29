@@ -31,13 +31,11 @@
         "P9.11", // uart4_rxd // GPS
 
 		"P8.07", // led1
-		"P8.08", // led2
 		"P8.10", // led3
 		"P8.09", // led4
         
 		/* the hardware IP uses */
 		"gpio2_2", // led1
-		"gpio2_3", // led2
 		"gpio2_4", // led3
 		"gpio2_5", // led4
 
@@ -58,7 +56,6 @@
 
             // LEDs:
 			P8_07_pinmux { status = "disabled"; };
-			P8_08_pinmux { status = "disabled"; };
 			P8_10_pinmux { status = "disabled"; };
 			P8_09_pinmux { status = "disabled"; };
 
@@ -71,7 +68,6 @@
 			led_pins: pinmux_led_pins { // was 0xf
 				pinctrl-single,pins = < 
 					BONE_P8_07 (PIN_OUTPUT | MUX_MODE7)
-					BONE_P8_08 (PIN_OUTPUT | MUX_MODE7)
 					BONE_P8_10 (PIN_OUTPUT | MUX_MODE7)
 					BONE_P8_09 (PIN_OUTPUT | MUX_MODE7)
 				>;
@@ -124,26 +120,20 @@
 				pinctrl-0 = <&led_pins>;
 				
 				led-1 {
-					label = "leds:led1";
-					gpios = <&gpio2 2 1>; /* flag 1 means active low */
+					label = "power";
+					gpios = <&gpio2 2 0>; /* flag 1 means active low */
 					linux,default-trigger = "none";
-					default-state = "off";
-				};
-				led-2 {
-					label = "leds:led2";
-					gpios = <&gpio2 3 1>; /* flag 1 means active low */
-					linux,default-trigger = "none";
-					default-state = "off";
+					default-state = "on";
 				};
 				led-3 {
-					label = "leds:led3";
-					gpios = <&gpio2 4 1>; /* flag 1 means active low */
+					label = "alarm";
+					gpios = <&gpio2 4 0>; /* flag 1 means active low */
 					linux,default-trigger = "none";
 					default-state = "off";
 				};
 				led-4 {
-					label = "leds:led4";
-					gpios = <&gpio2 5 1>; /* flag 1 means active low */
+					label = "radio";
+					gpios = <&gpio2 5 0>; /* flag 1 means active low */
 					linux,default-trigger = "none";
 					default-state = "off";
 				};
