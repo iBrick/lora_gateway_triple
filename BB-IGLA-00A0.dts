@@ -27,10 +27,21 @@
 		/* the pins header uses */
 		"P8.19", // OneWire
         
-        "P9.13", // uart4_txd
-        "P9.11", // uart4_rxd
+        "P9.13", // uart4_txd // GPS
+        "P9.11", // uart4_rxd // GPS
 
-        "uart4"; // hardware ip used
+		"P8.07", // led1
+		"P8.08", // led2
+		"P8.10", // led3
+		"P8.09", // led4
+        
+		/* the hardware IP uses */
+		"gpio2_2", // led1
+		"gpio2_3", // led2
+		"gpio2_4", // led3
+		"gpio2_5", // led4
+
+        "uart4"; // GPS
 
 	/*
 	 * Free up the pins used by the cape from the pinmux helpers.
@@ -38,16 +49,34 @@
 	fragment@0 {
 		target = <&ocp>;
 		__overlay__ {
-			P8_19_pinmux { status = "disabled"; };  /* OneWire */
+            // OneWire:
+			P8_19_pinmux { status = "disabled"; };
 
+            // GPS:
             P9_13_pinmux { status = "disabled"; };  /* uart4_txd */
             P9_11_pinmux { status = "disabled"; };  /* uart4_rxd */
+
+            // LEDs:
+			P8_07_pinmux { status = "disabled"; };
+			P8_08_pinmux { status = "disabled"; };
+			P8_10_pinmux { status = "disabled"; };
+			P8_09_pinmux { status = "disabled"; };
+
 		};
 	};
 
 	fragment@1 {
 		target = <&am33xx_pinmux>;
 		__overlay__ {
+			led_pins: pinmux_led_pins { // was 0xf
+				pinctrl-single,pins = < 
+					BONE_P8_07 (PIN_OUTPUT | MUX_MODE7)
+					BONE_P8_08 (PIN_OUTPUT | MUX_MODE7)
+					BONE_P8_10 (PIN_OUTPUT | MUX_MODE7)
+					BONE_P8_09 (PIN_OUTPUT | MUX_MODE7)
+				>;
+			};
+
 			dallas_w1_pins: pinmux_dallas_w1_pins {
 				pinctrl-single,pins = < 
 					BONE_P8_19 0x37
@@ -66,7 +95,6 @@
 	fragment@2 {
 		target-path="/";
 		__overlay__ {
-
 			onewire {
 				status = "okay";
 				pinctrl-names = "default";
@@ -86,4 +114,41 @@
             pinctrl-0 = <&bb_uart4_pins>;
         };
     };
+
+	fragment@4 {
+		target = <&ocp>;
+		__overlay__ {
+			led_pins_helper {
+				compatible = "gpio-leds";
+				pinctrl-names = "default";
+				pinctrl-0 = <&led_pins>;
+				
+				led-1 {
+					label = "leds:led1";
+					gpios = <&gpio2 2 1>; /* flag 1 means active low */
+					linux,default-trigger = "none";
+					default-state = "off";
+				};
+				led-2 {
+					label = "leds:led2";
+					gpios = <&gpio2 3 1>; /* flag 1 means active low */
+					linux,default-trigger = "none";
+					default-state = "off";
+				};
+				led-3 {
+					label = "leds:led3";
+					gpios = <&gpio2 4 1>; /* flag 1 means active low */
+					linux,default-trigger = "none";
+					default-state = "off";
+				};
+				led-4 {
+					label = "leds:led4";
+					gpios = <&gpio2 5 1>; /* flag 1 means active low */
+					linux,default-trigger = "none";
+					default-state = "off";
+				};
+			};
+			
+		};
+	};
 };
