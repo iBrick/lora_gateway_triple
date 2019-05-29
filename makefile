@@ -4,7 +4,15 @@ module0 = -DSX1272_RST=9 -DSX1272_SS=7 -DSX1272_NSS1=2 -DSX1272_NSS2=5 -DMODULE=
 module1 = -DSX1272_RST=3 -DSX1272_SS=2 -DSX1272_NSS1=7 -DSX1272_NSS2=5 -DMODULE=1 -DSX1272_debug_mode=0 -DLCI=6
 module2 = -DSX1272_RST=4 -DSX1272_SS=5 -DSX1272_NSS1=7 -DSX1272_NSS2=2 -DMODULE=2 -DSX1272_debug_mode=0 -DLCI=8
 
-lora_gateway_bb_all_modules: lora_gateway_bb_module0 lora_gateway_bb_module1 lora_gateway_bb_module2
+downlink = $(module1)
+
+lora_gateway_bb_all_modules: lora_gateway_bb_module0 lora_gateway_bb_module1 lora_gateway_bb_module2 downlinker
+
+downlinker: downlinker.o arduPi_bb.o SX1272_bb_module1.o SPI.o GPIO.o Base64.o
+	g++ -lrt -lpthread SPI.o GPIO.o downlinker.o Base64.o arduPi_bb.o SX1272_bb_module1.o -o downlinker
+
+downlinker.o: downlinker.cpp radio.makefile gateway_conf.json
+	g++ $(CFLAGS) -DRASPBERRY $(downlink) -DBEAGLEBONE -DIS_RCV_GATEWAY -c downlinker.cpp -o downlinker.o
 
 GPIO.o: GPIO.cpp GPIO.h
 	g++ -lrt -lpthread -c GPIO.cpp -o GPIO.o
