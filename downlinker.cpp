@@ -61,7 +61,7 @@ void startConfig() {
   printf("%s", "^$SX1272/76 configured ");
 }
 
-int setup() {
+int setup_radio() {
   int e;
 
   e = sx1272.ON();
@@ -78,7 +78,7 @@ int setup() {
 char fromfile[2048];
 char decoded[256];
 void loop(void) {
-  file *fp = fopen("/home/pi/lora_gateway/downlink/downlink.txt", "r");
+  FILE *fp = fopen("/home/pi/lora_gateway/downlink/downlink.txt", "r");
   if (fp) {
     fseek(fp, 0, SEEK_END);
     int size_fromfile = ftell(fp);
@@ -105,7 +105,7 @@ void loop(void) {
 }
 
 int main(int argc, char *argv[]) {
-  while (setup()) {
+  while (setup_radio()) {
   }
   while (1) {
     loop();
