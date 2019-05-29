@@ -173,10 +173,10 @@ def main(ldata, pdata, rdata, tdata, gwid):
     print("RNH: we got pkg for MQTT")
     try:
         led_towrite = '0'
-        with led_file = open('/sys/class/leds/radio/brightness', 'r'):
+        with open('/sys/class/leds/radio/brightness', 'r') as led_file:
             if led_file.read(1) == '0':
                 led_towrite = '1'
-        with led_file = open('/sys/class/leds/radio/brightness', 'w'):
+        with open('/sys/class/leds/radio/brightness', 'w') as led_file:
             led_file.write(led_towrite)
     except:
         pass
