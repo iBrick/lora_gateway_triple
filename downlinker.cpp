@@ -75,8 +75,8 @@ int setup_radio() {
   return e;
 }
 
-char fromfile[2048];
-char decoded[256];
+unsigned char fromfile[2048];
+unsigned char decoded[256];
 void loop(void) {
   FILE *fp = fopen("/home/pi/lora_gateway/downlink/downlink.txt", "r");
   if (fp) {
