@@ -93,7 +93,8 @@ void loop(void) {
         size_fromfile--;
 
       if (size_fromfile) {
-        int size_decoded = base64_decode(decoded, fromfile, size_fromfile);
+        int size_decoded =
+            base64_decode((char *)decoded, (char *)fromfile, size_fromfile);
         sx1272.sendPacketMAXTimeout(255, decoded, size_decoded);
 
         remove("/home/pi/lora_gateway/downlink/downlink.txt");
