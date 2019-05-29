@@ -171,6 +171,15 @@ def main(ldata, pdata, rdata, tdata, gwid):
     SNR = arr[5]
     RSSI = arr[6]
     print("RNH: we got pkg for MQTT")
+    try:
+        led_towrite = '0'
+        with led_file = open('/sys/class/leds/radio/brightness', 'r'):
+            if led_file.read(1) == '0':
+                led_towrite = '1'
+        with led_file = open('/sys/class/leds/radio/brightness', 'w'):
+            led_file.write(led_towrite)
+    except:
+        pass
     # LoRaWAN packet
     if dst == 256:
         src_str = "%0.8X" % src
