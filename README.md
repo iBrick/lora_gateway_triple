@@ -255,14 +255,9 @@ MQTTClientLoRa установка и настройка
 
 	sudo nano /etc/X11/xinit/xinitrc
 
-		put a # in front off the line containing
-
-		. /etc/X11/Xsession
+		make sure every line there has # in the front, then add new line with text:
 		
-
-	sudo nano ~pi/.xinitrc
-
-		put: /usr/bin/python3 /home/pi/igla-gui/igla-gui.py
+		/home/pi/igla-gui/igla_gui.py
 		
 	download Igla GUI git repository to /home/pi: 
 	https://github.com/Renha/igla-gui 
