@@ -29,11 +29,15 @@
 #include "SX1272.h"
 #include <math.h>
 
+#include <errno.h>
+#include <fcntl.h>
 #include <getopt.h>
 #include <math.h>
+#include <poll.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/time.h>
 #include <termios.h>
 #include <time.h>
@@ -147,6 +151,8 @@ uint8_t sx1272_CAD_value[11]  = {0, 62, 31, 16, 16, 8, 9, 5, 3, 1, 1};
 #ifndef ARDUINO
 
 #  include <semaphore.h>
+#  define SPI_SEMAPHORE "/spi_shared_access"
+sem_t *spi_sem;
 
 #  define SS_STATE_FREE HIGH
 #  define SS_STATE_BLOCK LOW
