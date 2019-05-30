@@ -166,13 +166,13 @@ char module_control_file[] = "/sys/class/leds/_module0/brightness";
 void module_activate(int module_number) {
   module_control_file[MODULE_CONTROL_INDEX] = '0' + module_number;
   int fd = open(module_control_file, O_WRONLY);
-  std::write(fd, "1", 2);
+  unistd::write(fd, "1", 2);
 }
 
 void module_deactivate(int module_number) {
   module_control_file[MODULE_CONTROL_INDEX] = '0' + module_number;
   int fd = open(module_control_file, O_WRONLY);
-  std::write(fd, "0", 2);
+  unistd::write(fd, "0", 2);
 }
 
 void module_activate() {
