@@ -136,13 +136,43 @@ uint8_t sx1272_CAD_value[11]  = {0, 62, 31, 16, 16, 8, 9, 5, 3, 1, 1};
 
 #ifndef ARDUINO
 
+#  include <semaphore.h>
+
 #  define SS_STATE_FREE HIGH
 #  define SS_STATE_BLOCK LOW
 #  define SS_STATE_UNKNOWN (HIGH + LOW + 1)
 
 byte ss_state = SS_STATE_UNKNOWN;
 
-#  include <semaphore.h>
+char module_control_file = "/sys/class/leds/_module0/brightness";
+#  define MODULE_CONTROL_INDEX (23)
+
+void module_activate(int module_number) {
+  module_control_file[MODULE_CONTROL_INDEX] = '0' + module_number;
+  int fd = open(module_control_file, O_WRONLY);
+  write(fd, "1", 2);
+}
+
+void module_deactivate(int module_number) {
+  module_control_file[MODULE_CONTROL_INDEX] = '0' + module_number;
+  int fd = open(module_control_file, O_WRONLY);
+  write(fd, "0", 2);
+}
+
+void module_activate() {
+  if (ss_state != SS_STATE_BLOCK)
+    sem_wait(spi_sem);
+  module_activate(MODULE);
+  ss_state = SS_STATE_BLOCK;
+}
+
+void module_deactivate() {
+  if (ss_state == SS_STATE_BLOCK)
+    sem_post(spi_sem);
+  module_deactivate(MODULE);
+  ss_state = SS_STATE_FREE;
+}
+
 #  define SPI_SEMAPHORE "/spi_shared_access"
 sem_t *spi_sem;
 
@@ -154,35 +184,14 @@ void initSafeWrite() {
       SEM_FAILED) { // We are the first program of the pack reached that point
     // init chip select lanes:
     ss_state = SS_STATE_FREE;
-    digitalWrite(SX1272_SS, SS_STATE_FREE);
-    digitalWrite(SX1272_NSS1, SS_STATE_FREE);
-    digitalWrite(SX1272_NSS2, SS_STATE_FREE);
+    module_deactivate(0);
+    module_deactivate(1);
+    module_deactivate(2);
     // free the semaphore so any program could start communication:
     sem_post(spi_sem);
   } else if (errno == EEXIST) {
     spi_sem = sem_open(SPI_SEMAPHORE, 0);
   }
-}
-
-void digitalWriteSafely(byte Pin, byte State) {
-  byte told = 0;
-  if (Pin == SX1272_SS && State == SS_STATE_BLOCK &&
-      ss_state != SS_STATE_BLOCK) {
-    // int sv= 0;
-    // sem_getvalue(spi_sem,&sv);
-    // printf("%d ",sv);
-    sem_wait(spi_sem);
-    // while(sem_trywait(spi_sem)) delay(1);
-    // printf("lock\r\n");
-  }
-  digitalWrite(Pin, State);
-  if (Pin == SX1272_SS && State == SS_STATE_FREE &&
-      ss_state == SS_STATE_BLOCK) {
-    sem_post(spi_sem);
-    // printf("unlock\r\n");
-  }
-  if (Pin == SX1272_SS)
-    ss_state = State;
 }
 
 #else
@@ -299,7 +308,7 @@ uint8_t SX1272::ON() {
 
   // Powering the module
   pinMode(SX1272_SS, OUTPUT);
-  digitalWriteSafely(SX1272_SS, HIGH);
+  module_deactivate();
   delay(100);
 
   // Configure the MISO, MOSI, CS, SPCR.
@@ -314,9 +323,9 @@ uint8_t SX1272::ON() {
 
   // added by C. Pham
   pinMode(SX1272_RST, OUTPUT);
-  digitalWriteSafely(SX1272_RST, HIGH);
+  // digitalWriteSafely(SX1272_RST, HIGH);
   delay(100);
-  digitalWriteSafely(SX1272_RST, LOW);
+  // digitalWriteSafely(SX1272_RST, LOW);
   delay(100);
 
   // from single_chan_pkt_fwd by Thomas Telkamp
@@ -328,9 +337,9 @@ uint8_t SX1272::ON() {
     _board = SX1272Chip;
   } else {
     // sx1276?
-    digitalWriteSafely(SX1272_RST, LOW);
+    // digitalWriteSafely(SX1272_RST, LOW);
     delay(100);
-    digitalWriteSafely(SX1272_RST, HIGH);
+    // digitalWriteSafely(SX1272_RST, HIGH);
     delay(100);
     version = readRegister(REG_VERSION);
     if (version == 0x12) {
@@ -514,8 +523,7 @@ void SX1272::OFF() {
 
   SPI.end();
   // Powering the module
-  pinMode(SX1272_SS, OUTPUT);
-  digitalWriteSafely(SX1272_SS, LOW);
+  module_activate();
 #if (SX1272_debug_mode > 1)
   printf("## Setting OFF ##\n");
   printf("\n");
@@ -529,14 +537,14 @@ void SX1272::OFF() {
    address: address register to read from
 */
 byte SX1272::readRegister(byte address) {
-  digitalWriteSafely(SX1272_SS, LOW);
+  module_activate();
   bitClear(address, 7); // Bit 7 cleared to write in registers
   // SPI.transfer(address);
   // value = SPI.transfer(0x00);
   txbuf[0] = address;
   txbuf[1] = 0x00;
   maxWrite16();
-  digitalWriteSafely(SX1272_SS, HIGH);
+  module_deactivate();
 
 #if (SX1272_debug_mode > 1)
   printf("## Reading:  ##\tRegister ");
@@ -557,7 +565,7 @@ byte SX1272::readRegister(byte address) {
    data : value to write in the register
 */
 void SX1272::writeRegister(byte address, byte data) {
-  digitalWriteSafely(SX1272_SS, LOW);
+  module_activate();
   delay(1);
   bitSet(address, 7); // Bit 7 set to read from registers
   // SPI.transfer(address);
@@ -585,9 +593,9 @@ void SX1272::writeRegister(byte address, byte data) {
    state = 0  --> The command has been executed with no errors
 */
 void SX1272::maxWrite16() {
-  digitalWriteSafely(SX1272_SS, LOW);
+  module_activate();
   SPI.transfernb(txbuf, rxbuf, 2);
-  digitalWriteSafely(SX1272_SS, HIGH);
+  module_deactivate();
 }
 
 /*
