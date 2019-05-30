@@ -29,6 +29,16 @@
 #include "SX1272.h"
 #include <math.h>
 
+#include <getopt.h>
+#include <math.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/time.h>
+#include <termios.h>
+#include <time.h>
+#include <unistd.h>
+
 /*  CHANGE LOGS by C. Pham
  *	August 28th, 2018
  *		- add a small delay in the availableData() loop that decreases
@@ -144,7 +154,7 @@ uint8_t sx1272_CAD_value[11]  = {0, 62, 31, 16, 16, 8, 9, 5, 3, 1, 1};
 
 byte ss_state = SS_STATE_UNKNOWN;
 
-char module_control_file = "/sys/class/leds/_module0/brightness";
+char module_control_file[] = "/sys/class/leds/_module0/brightness";
 #  define MODULE_CONTROL_INDEX (23)
 
 void module_activate(int module_number) {
