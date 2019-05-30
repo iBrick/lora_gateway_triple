@@ -189,9 +189,6 @@ void module_deactivate() {
   ss_state = SS_STATE_FREE;
 }
 
-#  define SPI_SEMAPHORE "/spi_shared_access"
-sem_t *spi_sem;
-
 void initSafeWrite() {
   ss_state = SS_STATE_UNKNOWN;
   // Create semaphore in locked state, so we could initialize everything:
