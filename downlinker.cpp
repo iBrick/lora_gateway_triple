@@ -115,6 +115,8 @@ void loop(void) {
 }
 
 int main(int argc, char *argv[]) {
+  setbuf(stdout, NULL); // disable buffering // debug
+
   while (setup_radio()) {
   }
   while (1) {
