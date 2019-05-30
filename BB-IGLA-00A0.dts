@@ -73,7 +73,7 @@
 
 			P9_18_pinmux { status = "disabled"; }; // MOSI
 			P9_21_pinmux { status = "disabled"; }; // MISO
-			P9_22_pinmux { status = "disabled"; }; // SCK
+			P9_22_pinmux { status = "disabled"; }; // SCLK
 		};
 	};
 
@@ -111,7 +111,7 @@
                 pinctrl-single,pins = <
                     BONE_P9_18 (PIN_OUTPUT_PULLUP | MUX_MODE0)     // MOSI
                     BONE_P9_21 (PIN_INPUT_PULLUP  | MUX_MODE0)     // MISO
-                    BONE_P9_22 (PIN_OUTPUT_PULLUP | MUX_MODE0)     // SCK
+                    BONE_P9_22 (PIN_INPUT_PULLUP  | MUX_MODE0)     // SCLK
                 >;
             };
 		};
