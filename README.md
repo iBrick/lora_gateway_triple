@@ -281,6 +281,16 @@ Internet over USB
 
 	или выполнить скрипт getinternetfromusb.sh из директории lora_gateway
 
+Настройка автозапуска устройства
+=========================
+Основные компоненты для автозагрузки при запуске операционной системы: 
+1) драйверы радиомодулей и их обработка:
+для автозапуска скопируйте файл из директории lora_gateway_triple/scripts/loragateway.service в директорию /etc/systemd/system
+и выполните команду sudo systemctl enable loragateway.service. 
+Перезагрузите устройство (sudo reboot).
+2) mqttclient (MQTTClientLoRa)
+3) GUI (igla-gui) через startx
+
 Запуск устройства вручную
 =========================
 
