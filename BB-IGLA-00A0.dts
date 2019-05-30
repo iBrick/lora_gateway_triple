@@ -109,9 +109,9 @@
 
             sx1276_pins: pinmux_sx1276_pins {
                 pinctrl-single,pins = <
-                    BONE_P9_18 (PIN_OUTPUT | MUX_MODE0)     // MOSI
-                    BONE_P9_21 (PIN_INPUT  | MUX_MODE0)     // MISO
-                    BONE_P9_22 (PIN_OUTPUT | MUX_MODE0)     // SCK
+                    BONE_P9_18 (PIN_OUTPUT_PULLUP | MUX_MODE0)     // MOSI
+                    BONE_P9_21 (PIN_INPUT_PULLUP  | MUX_MODE0)     // MISO
+                    BONE_P9_22 (PIN_OUTPUT_PULLUP | MUX_MODE0)     // SCK
                 >;
             };
 		};
