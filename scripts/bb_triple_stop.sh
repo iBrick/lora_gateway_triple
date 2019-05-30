@@ -2,6 +2,7 @@
 
 sudo killall python
 
+sudo killall downlinker
 sudo killall lora_gateway_bb_module0
 sudo killall lora_gateway_bb_module1
 sudo killall lora_gateway_bb_module2
