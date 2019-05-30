@@ -167,12 +167,14 @@ void module_activate(int module_number) {
   module_control_file[MODULE_CONTROL_INDEX] = '0' + module_number;
   int fd = open(module_control_file, O_WRONLY);
   unistd::write(fd, "1", 2);
+  close(fd);
 }
 
 void module_deactivate(int module_number) {
   module_control_file[MODULE_CONTROL_INDEX] = '0' + module_number;
   int fd = open(module_control_file, O_WRONLY);
   unistd::write(fd, "0", 2);
+  close(fd);
 }
 
 void module_activate() {
