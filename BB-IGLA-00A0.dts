@@ -143,6 +143,8 @@
     fragment@4 {
         target = <&spi0>;
         __overlay__ {
+             #address-cells = <1>;
+             #size-cells = <0>;
             
              status = "okay";
              pinctrl-names = "default";
