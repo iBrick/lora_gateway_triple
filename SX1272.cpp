@@ -320,7 +320,6 @@ uint8_t SX1272::ON() {
   printf("Using module %d\n", MODULE);
 
   // Powering the module
-  pinMode(SX1272_SS, OUTPUT);
   module_deactivate();
   delay(100);
 
@@ -332,13 +331,6 @@ uint8_t SX1272::ON() {
   SPI.setClockDivider(SPI_CLOCK_DIV64);
   // Set data mode
   SPI.setDataMode(SPI_MODE0);
-  delay(100);
-
-  // added by C. Pham
-  pinMode(SX1272_RST, OUTPUT);
-  // digitalWriteSafely(SX1272_RST, HIGH);
-  delay(100);
-  // digitalWriteSafely(SX1272_RST, LOW);
   delay(100);
 
   // from single_chan_pkt_fwd by Thomas Telkamp
