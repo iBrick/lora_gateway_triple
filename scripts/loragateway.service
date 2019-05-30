@@ -1,0 +1,14 @@
+[Unit]
+Description=Start MQTT Client service
+Before=mqttclient.service
+
+[Service] 
+WorkingDirectory=/home/pi/lora_gateway/
+ExecStart=/home/pi/lora_gateway/scripts/bb_triple_autostart.sh
+SyslogIdentifier=loraGatewayIGLA
+Restart=on-failure 
+RemainAfterExit=yes
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
