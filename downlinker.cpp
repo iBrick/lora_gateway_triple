@@ -39,6 +39,7 @@ uint32_t loraChannel = loraChannelArray[loraChannelIndex];
 
 void startConfig() {
 
+  printf("%s\r\n", "Started configuration process");
   int e;
 
   e = sx1272.setMode(loraMode);
@@ -58,10 +59,12 @@ void startConfig() {
 
   // sx1272._rawFormat = true;
 
-  printf("%s", "^$SX1272/76 configured ");
+  printf("%s\r\n", "SX1272/76 configured");
 }
 
 int setup_radio() {
+
+  printf("%s\r\n", "Started setup process");
   int e;
 
   e = sx1272.ON();
@@ -73,6 +76,7 @@ int setup_radio() {
 
   delay(1000);
   return e;
+  printf("%s\r\n", "Radio setup finished");
 }
 
 unsigned char fromfile[2048];
@@ -80,11 +84,14 @@ unsigned char decoded[256];
 void loop(void) {
   FILE *fp = fopen("/home/pi/lora_gateway/downlink/downlink.txt", "r");
   if (fp) {
+    printf("%s\r\n", "File exists");
     fseek(fp, 0, SEEK_END);
     int size_fromfile = ftell(fp);
     fseek(fp, 0, SEEK_SET);
 
     if (size_fromfile > 1 && size_fromfile < 2048) {
+
+      printf("%s\r\n", "File has correct size");
       fread(fromfile, 1, size_fromfile, fp);
       fclose(fp);
 
@@ -93,11 +100,12 @@ void loop(void) {
         size_fromfile--;
 
       if (size_fromfile) {
+        printf("%s\r\n", "Sending...");
         int size_decoded =
             base64_decode((char *)decoded, (char *)fromfile, size_fromfile);
         sx1272.sendPacketMAXTimeout(255, decoded, size_decoded);
 
-        remove("/home/pi/lora_gateway/downlink/downlink.txt");
+        // remove("/home/pi/lora_gateway/downlink/downlink.txt");
       }
     } else
       fclose(fp);
