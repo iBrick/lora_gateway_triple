@@ -28,22 +28,24 @@
 		"P8.19", // OneWire
 
         // GPS:
-        "P9.12", // gps_on       
+        "uart4", // uart   
         "P9.13", // uart4_txd
         "P9.11", // uart4_rxd
+        "P9.12", "gpio1_28", // gps_on    
 
         // LEDs:
-		"P8.07", // led1
-		"P8.10", // led3
-		"P8.09", // led4
-        
-		/* the hardware IP uses */
-		"gpio2_2", // led1
-		"gpio2_4", // led3
-		"gpio2_5", // led4
+		"P8.07", "gpio2_2", // led1
+		"P8.10", "gpio2_4", // led3
+		"P8.09", "gpio2_5", // led4
 
-        "gpio1_28", // gps_on
-        "uart4"; // gps_uart
+        // SX1276:
+        "spi0", // spi
+		"P9.18", // MOSI
+		"P9.21", // MISO
+		"P9.22", // SCK
+		"P9.26", "gpio0_14", // NSS0
+		"P9.23", "gpio1_17", // NSS1
+		"P9.16", "gpio1_19"; // NSS2
 
 	/*
 	 * Free up the pins used by the cape from the pinmux helpers.
