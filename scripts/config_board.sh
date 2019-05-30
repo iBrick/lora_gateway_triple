@@ -4,39 +4,21 @@ IP=()
 OP0=()
 OP1=()
 
-config-pin 911 uart
-config-pin 912 gpio ; OP1+=(60)
-config-pin 913 uart
 config-pin 914 gpio ; IP+=(40)
 config-pin 918 spi
 config-pin 919 i2c
 config-pin 920 i2c
 config-pin 921 spi
 config-pin 922 spi_sclk
-# module 0: NSS, RST, DIO0, DIO1
+# module 0: NSS
 config-pin 926 gpio ; OP1+=(14)
-config-pin 820 gpio ; IP+=(63)
-config-pin 815 gpio ; IP+=(47)
-config-pin 816 gpio ; IP+=(46)
-# LEDs: LED1, LED2, LED3, LED4
-config-pin 807 gpio ; OP0+=(66)
-config-pin 808 gpio ; OP0+=(67)
-config-pin 809 gpio ; OP0+=(69)
-config-pin 810 gpio ; OP0+=(68)
-# module 1: NSS, RST, DIO0, DIO1
-config-pin 823 gpio ; OP1+=(49)
-config-pin 822 gpio ; IP+=(37)
-config-pin 813 gpio ; IP+=(23)
-config-pin 814 gpio ; IP+=(26)
-# BTP, BUZZER, iBUTTON
+# module 1: NSS
+config-pin 923 gpio ; OP1+=(49)
+# BTP, BUZZER
 config-pin 817 gpio ; IP+=(27)
 config-pin 818 gpio ; OP0+=(65)
-config-pin 819 gpio ; IP+=(22) # ?
-# module 2: NSS, RST, DIO0, DIO1
+# module 2: NSS
 config-pin 916 gpio ; OP1+=(51)
-config-pin 821 gpio ; IP+=(52)
-config-pin 811 gpio ; IP+=(45)
-config-pin 812 gpio ; IP+=(44)
 
 # exporting unexported GPIO pins
 for OPN in ${OP1[@]} ${OP0[@]} ${IP[@]}
