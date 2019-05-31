@@ -112,8 +112,8 @@ void loop(void) {
     } else
       fclose(fp);
   }
-  // delay(10);
-  delay(10000); // debug: send not more often than 10 seconds
+  delay(10);
+  // delay(10000); // debug: send not more often than 10 seconds
 }
 
 int main(int argc, char *argv[]) {
