@@ -4,12 +4,12 @@ IP=()
 OP0=()
 OP1=()
 
-config-pin 914 gpio ; IP+=(40)
-config-pin 919 i2c
-config-pin 920 i2c
+#config-pin 914 gpio ; IP+=(40)
+#config-pin 919 i2c
+#config-pin 920 i2c
 # BTP, BUZZER
-config-pin 817 gpio ; IP+=(27)
-config-pin 818 gpio ; OP0+=(65)
+#config-pin 817 gpio ; IP+=(27)
+#config-pin 818 gpio ; OP0+=(65)
 
 # exporting unexported GPIO pins
 for OPN in ${OP1[@]} ${OP0[@]} ${IP[@]}
