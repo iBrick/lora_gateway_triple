@@ -22,8 +22,6 @@ uint32_t loraChannelArray[] = {CH_04_868, CH_05_868, CH_06_868, CH_07_868,
                                CH_12_868, CH_13_868, CH_14_868, CH_15_868,
                                CH_16_868, CH_17_868, CH_18_868};
 
-uint8_t loraAddr = LORA_ADDR;
-
 void startConfig(int channel, int mode, int addr, int dbm) {
 
   printf("%s\r\n", "Started configuration process");
@@ -41,7 +39,7 @@ void startConfig(int channel, int mode, int addr, int dbm) {
 
   e = sx1272.setPreambleLength(8);
 
-  // e = sx1272.setNodeAddress(loraAddr);
+  // e = sx1272.setNodeAddress(addr);
   sx1272._nodeAddress = addr;
 
   // sx1272._rawFormat = true;
