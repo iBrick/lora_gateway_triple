@@ -26,9 +26,6 @@ lora_gateway.o: lora_gateway.cpp radio.makefile gateway_conf.json
 arduPi.o: arduPi.cpp arduPi.h
 	g++ -c arduPi.cpp -o arduPi.o	
 
-arduPi_pi2.o: arduPi_pi2.cpp arduPi_pi2.h
-	g++ -c arduPi_pi2.cpp -o arduPi_pi2.o	
-
 arduPi_bb.o: arduPi_bb.cpp arduPi_bb.h
 	g++ -l SPI.o -l GPIO.o -c arduPi_bb.cpp -o arduPi_bb.o
 
@@ -36,7 +33,7 @@ SX1272.o: SX1272.cpp SX1272.h
 	g++ -c SX1272.cpp -o SX1272.o
 
 SX1272_bb.o: SX1272.cpp SX1272.h
-	g++ -DBEAGLEBONE -c SX1272.cpp -o SX1272_pi2.o
+	g++ -DBEAGLEBONE -c SX1272.cpp -o SX1272_bb.o
 
 SX1272_wnetkey.o: SX1272.cpp
 	g++ -DW_NET_KEY -c SX1272.cpp -o SX1272_wnetkey.o
