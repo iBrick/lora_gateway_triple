@@ -81,33 +81,16 @@ Run commands:
 Получите исходный код проекта и разместите его в домашней директории
 пользователя, так чтобы путь к файлам проекта получился `/home/pi/lora_gateway`.
 
-Создайте в директории проекта  новые пустые директории `downlink` и `log`.
-
 Login as user 'pi'
 
-	git clone https://github.com/iBrick/lora_gateway_triple.git
+	git clone https://github.com/iBrick/lora_gateway_triple.git /home/pi/lora_gateway
 
-	mv lora_gateway_triple/ lora_gateway
+Конфигурация проекта 
+--------------------
+Выполните скрипт `setup.sh`, затем перезагрузите устройство командой  `sudo reboot`.
 
-	cd lora_gateway/
+	/home/pi/lora_gateway/setup.sh
 
-	mkdir downlink
-
-	mkdir log
-
-Конфигурация аппаратного обеспечения 
-------------------------------------
-Необходимо, заручившись правами администратора, скопировать из директории проекта следующие файлы:
-
-- файл `BB-W1-P8.19-00A0.dtbo` положить в директорию `/lib/firmware`,
-- файл `uEnv.txt` положить в директорию `/boot`, заменяя имеющийся.
-
-После этого требуется перезагрузить устройство командой `sudo reboot`.
-
-	sudo cp BB-W1-P8.19-00A0.dtbo /lib/firmware/
-
-	sudo cp uEnv.txt /boot/
-	
 	sudo reboot
 	
 Установка дополнительного программного обеспечения
@@ -169,8 +152,7 @@ WiFi настройка
 
 GPS - приёмник
 --------------
-Требует предварительно запущенного скрипта `config-board` для настройки портов ввода-вывода.
-Также необходимо выполнить настройку сервиса, в файле `/etc/default/gpsd` указав:
+Необходимо выполнить настройку сервиса, в файле `/etc/default/gpsd` указав:
 
 	DEVICES="/dev/ttyS4"
 
