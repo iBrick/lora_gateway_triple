@@ -1,6 +1,6 @@
 #!/bin/bash
 if  [[ `whoami` == "root" ]]; then
-	echo "Error: don't `sudo` me! I'll ask for privelegies when I'll need those."
+	echo "Error: don't 'sudo' me! I'll ask for privelegies when I'll need those."
 else
 	(
 		echo "Starting setup"
