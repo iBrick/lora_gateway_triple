@@ -1,12 +1,14 @@
 include radio.makefile
 
+debug = $(-DSX1272_debug_mode=2)
+
 lora_gateway_full: uplinker downlinker
 
 downlinker: downlinker.o arduPi_bb.o SX1272_bb.o SPI.o GPIO.o Base64.o
 	g++ -lrt -lpthread SPI.o GPIO.o downlinker.o Base64.o arduPi_bb.o SX1272_bb.o -o downlinker
 
 downlinker.o: downlinker.cpp radio.makefile gateway_conf.json
-	g++ $(CFLAGS) -DRASPBERRY -DBEAGLEBONE -DIS_RCV_GATEWAY -c downlinker.cpp -o downlinker.o
+	g++ $(CFLAGS) $(debug) -DRASPBERRY -DBEAGLEBONE -DIS_RCV_GATEWAY -c downlinker.cpp -o downlinker.o
 
 GPIO.o: GPIO.cpp GPIO.h
 	g++ -lrt -lpthread -c GPIO.cpp -o GPIO.o
@@ -21,7 +23,7 @@ uplinker: lora_gateway.o arduPi_bb.o SX1272_bb.o
 	g++ -lrt -lpthread SPI.o GPIO.o lora_gateway.o Base64.o arduPi_bb.o SX1272_bb.o -o uplinker	
 
 lora_gateway.o: lora_gateway.cpp radio.makefile gateway_conf.json
-	g++ $(CFLAGS) -DRASPBERRY -DBEAGLEBONE -DIS_RCV_GATEWAY -c lora_gateway.cpp -o lora_gateway.o
+	g++ $(CFLAGS) $(debug) -DRASPBERRY -DBEAGLEBONE -DIS_RCV_GATEWAY -c lora_gateway.cpp -o lora_gateway.o
 
 arduPi.o: arduPi.cpp arduPi.h
 	g++ -c arduPi.cpp -o arduPi.o	
@@ -33,7 +35,7 @@ SX1272.o: SX1272.cpp SX1272.h
 	g++ -c SX1272.cpp -o SX1272.o
 
 SX1272_bb.o: SX1272.cpp SX1272.h
-	g++ -DBEAGLEBONE -c SX1272.cpp -o SX1272_bb.o
+	g++ $(debug) -DBEAGLEBONE -c SX1272.cpp -o SX1272_bb.o
 
 SX1272_wnetkey.o: SX1272.cpp
 	g++ -DW_NET_KEY -c SX1272.cpp -o SX1272_wnetkey.o
