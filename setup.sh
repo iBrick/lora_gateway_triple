@@ -5,6 +5,8 @@ else
 	(
 		echo "-Starting setup"
 		cd /home/pi/lora_gateway
+		echo "-Creating neccessary folders"
+		mkdir /home/pi/lora_gateway/downlink
 		echo "-Fetching latest changes from repository"
 		git pull
 		echo "-Updating cape driver (reboot may be required)"
