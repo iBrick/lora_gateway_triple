@@ -56,27 +56,9 @@
 //#define W_NET_KEY
 //#define W_INITIALIZATION
 
-#ifndef MODULE
-	#define MODULE 0
-	#define SX1272_RST 9
-	#define SX1272_SS 7
-	#define SX1272_NSS1 2
-	#define SX1272_NSS2 5
-#endif
-
-// module 0:
-//#define SX1272_RST  9
-// module 1:
-//#define SX1272_RST  3
-
 #define SX1272Chip  0
 #define SX1276Chip  1
 // end
-
-// module 0:
-//#define SX1272_SS 7
-// module 1:
-//#define SX1272_SS 2
 
 //#define SX1272_debug_mode 1
 

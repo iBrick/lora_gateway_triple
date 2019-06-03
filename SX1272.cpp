@@ -148,81 +148,7 @@ uint8_t sx1272_CAD_value[11]  = {0, 62, 31, 16, 16, 8, 9, 5, 3, 1, 1};
 // Public functions.
 //**********************************************************************/
 
-#ifndef ARDUINO
-
-#  include <semaphore.h>
-#  define SPI_SEMAPHORE "/spi_shared_access"
-sem_t *spi_sem;
-
-#  define SS_STATE_FREE HIGH
-#  define SS_STATE_BLOCK LOW
-#  define SS_STATE_UNKNOWN (HIGH + LOW + 1)
-
-byte ss_state = SS_STATE_UNKNOWN;
-
-char module_control_file[] = "/sys/class/leds/_module0/brightness";
-#  define MODULE_CONTROL_INDEX (23)
-
-void module_activate(int module_number) {
-  module_control_file[MODULE_CONTROL_INDEX] = '0' + module_number;
-  int fd = open(module_control_file, O_WRONLY);
-  unistd::write(fd, "1", 2);
-  unistd::close(fd);
-}
-
-void module_deactivate(int module_number) {
-  module_control_file[MODULE_CONTROL_INDEX] = '0' + module_number;
-  int fd = open(module_control_file, O_WRONLY);
-  unistd::write(fd, "0", 2);
-  unistd::close(fd);
-}
-
-void module_activate() {
-  if (ss_state != SS_STATE_BLOCK)
-    sem_wait(spi_sem);
-  module_activate(MODULE);
-  ss_state = SS_STATE_BLOCK;
-}
-
-void module_deactivate() {
-  if (ss_state == SS_STATE_BLOCK)
-    sem_post(spi_sem);
-  module_deactivate(MODULE);
-  ss_state = SS_STATE_FREE;
-}
-
-void initSafeWrite() {
-  ss_state = SS_STATE_UNKNOWN;
-  // Create semaphore in locked state, so we could initialize everything:
-  spi_sem = sem_open(SPI_SEMAPHORE, O_CREAT | O_EXCL, 0777, 0);
-  if (spi_sem !=
-      SEM_FAILED) { // We are the first program of the pack reached that point
-    // init chip select lanes:
-    ss_state = SS_STATE_FREE;
-    module_deactivate(0);
-    module_deactivate(1);
-    module_deactivate(2);
-    // free the semaphore so any program could start communication:
-    sem_post(spi_sem);
-  } else if (errno == EEXIST) {
-    spi_sem = sem_open(SPI_SEMAPHORE, 0);
-  }
-}
-
-#else
-
-void initSafeWrite() { digitalWrite(SX1272_SS, SS_STATE_FREE); }
-
-void digitalWriteSafely(byte Pin, byte State) {
-  // TODO: version with reading port values
-  digitalWrite(Pin, State);
-}
-
-#endif
-
 SX1272::SX1272() {
-  initSafeWrite();
-
   // Initialize class variables
   _bandwidth       = BW_125;
   _codingRate      = CR_5;
@@ -319,10 +245,9 @@ uint8_t SX1272::ON(char *devpath) {
   printf("Starting 'ON'\n");
 #endif
 
-  printf("Using module %d\n", MODULE);
+  printf("Using module at dev %s\n", devpath);
 
   // Powering the module
-  module_deactivate();
   delay(100);
 
   // Configure the MISO, MOSI, CS, SPCR.
@@ -530,7 +455,6 @@ void SX1272::OFF() {
 
   SPI.end();
   // Powering the module
-  module_activate();
 #if (SX1272_debug_mode > 1)
   printf("## Setting OFF ##\n");
   printf("\n");
@@ -544,14 +468,12 @@ void SX1272::OFF() {
    address: address register to read from
 */
 byte SX1272::readRegister(byte address) {
-  module_activate();
   bitClear(address, 7); // Bit 7 cleared to write in registers
   // SPI.transfer(address);
   // value = SPI.transfer(0x00);
   txbuf[0] = address;
   txbuf[1] = 0x00;
   maxWrite16();
-  module_deactivate();
 
 #if (SX1272_debug_mode > 1)
   printf("## Reading:  ##\tRegister ");
@@ -572,14 +494,12 @@ byte SX1272::readRegister(byte address) {
    data : value to write in the register
 */
 void SX1272::writeRegister(byte address, byte data) {
-  module_activate();
   delay(1);
   bitSet(address, 7); // Bit 7 set to read from registers
   // SPI.transfer(address);
   // SPI.transfer(data);
   txbuf[0] = address;
   txbuf[1] = data;
-  maxWrite16();
   // digitalWriteSafely(SX1272_SS,HIGH);
 
 #if (SX1272_debug_mode > 1)
@@ -599,11 +519,7 @@ void SX1272::writeRegister(byte address, byte data) {
    state = 1  --> There has been an error while executing the command
    state = 0  --> The command has been executed with no errors
 */
-void SX1272::maxWrite16() {
-  module_activate();
-  SPI.transfernb(txbuf, rxbuf, 2);
-  module_deactivate();
-}
+void SX1272::maxWrite16() { SPI.transfernb(txbuf, rxbuf, 2); }
 
 /*
  Function: Clears the interruption flags
@@ -3983,7 +3899,7 @@ uint8_t SX1272::receivePacketTimeout(uint16_t wait) {
 }
 #else
 uint8_t SX1272::receivePacketTimeout(uint16_t wait) {
-  uint8_t state   = 2;
+  uint8_t state = 2;
   uint8_t state_f = 2;
 
 #  if (SX1272_debug_mode > 1)
