@@ -281,6 +281,7 @@ Internet over USB
 Отключите необязательные сервисы
 
 	sudo systemctl disable bonescript-autorun.service
+	sudo systemctl disable apache2
 
 Настройка автозапуска устройства
 =========================
