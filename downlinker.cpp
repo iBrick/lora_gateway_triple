@@ -103,6 +103,8 @@ void loop(void) {
   // delay(10000); // debug: send not more often than 10 seconds
 }
 
+#include <cstdlib>
+
 int main(int argc, char *argv[]) {
   setbuf(stdout, NULL); // disable buffering // debug
 
@@ -117,10 +119,10 @@ int main(int argc, char *argv[]) {
   }
 
   char *devpath = argv[1];
-  int channel   = argv[2];
-  int mode      = argv[3];
-  int addr      = argv[4];
-  int dbm       = argv[5];
+  int channel   = atoi(argv[2]);
+  int mode      = atoi(argv[3]);
+  int addr      = atoi(argv[4]);
+  int dbm       = atoi(argv[5]);
 
   while (setup_radio(devpath, channel, mode, addr, dbm)) {
   }
