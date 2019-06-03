@@ -6,6 +6,7 @@ StartLimitIntervalSec=1
 [Service]
 Restart=always
 RestartSec=1
+WorkingDirectory=/home/pi/lora_gateway
 ExecStart=/bin/sh -c '/home/pi/lora_gateway/uplinker /dev/spidev0.0 4 1 1 14 | python /home/pi/lora_gateway/post_processing_gw.py'
 
 [Install]
