@@ -1,0 +1,14 @@
+[Unit]
+
+Description=LoRa messages sender
+;After=network.target
+StartLimitIntervalSec=1
+[Service]
+;Type=simple
+Restart=always
+RestartSec=1
+ExecStart=/home/pi/lora_gateway/downlinker /dev/spidev0.1 6 1 1 14 | python /home/pi/lora_gateway/post_processing_gw.py
+
+[Install]
+WantedBy=network.target
+Alias=downlinker.service

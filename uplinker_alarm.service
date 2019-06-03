@@ -1,0 +1,14 @@
+[Unit]
+
+Description=LoRa alarm messages receiver
+;After=network.target
+StartLimitIntervalSec=1
+[Service]
+;Type=simple
+Restart=always
+RestartSec=1
+ExecStart=/home/pi/lora_gateway/uplinker /dev/spidev0.2 8 1 1 14 | python /home/pi/lora_gateway/post_processing_gw.py
+
+[Install]
+WantedBy=network.target
+Alias=uplinker_alarm.service
