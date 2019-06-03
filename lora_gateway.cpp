@@ -899,7 +899,7 @@ int CarrierSense(bool onlyOnce = false) {
   return 0;
 }
 
-void loop(void) {
+void loop(char *devpath) {
   int i = 0, e;
   int cmdValue;
 
@@ -1047,7 +1047,7 @@ void loop(void) {
         radioON = false;
         PRINT_CSTSTR("%s", "^$Resetting radio module");
         PRINTLN;
-        e = sx1272.ON();
+        e = sx1272.ON(devpath);
         PRINT_CSTSTR("%s", "^$Setting power ON: state ");
         PRINT_VALUE("%d", e);
         PRINTLN;
@@ -1481,7 +1481,7 @@ void loop(void) {
             PRINT_CSTSTR("%s", "^$Setting LoRa module to ON");
 
             // Power ON the module
-            e = sx1272.ON();
+            e = sx1272.ON(devpath);
             PRINT_CSTSTR("%s", "^$Setting power ON: state ");
             PRINT_VALUE("%d", e);
             PRINTLN;
