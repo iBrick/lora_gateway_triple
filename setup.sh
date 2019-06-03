@@ -9,7 +9,7 @@ else
 		echo "-Updating cape driver (reboot may be required)"
 		sudo bash update_cape.sh
 		echo "-Setting up uEnv.txt (backing up previous to uEnv.txt.bk)"
-		if [[ cmp --silent /boot/uEnv.txt /home/pi/lora_gateway/uEnv.txt ]]; then
+		if [[ `cmp --silent /boot/uEnv.txt /home/pi/lora_gateway/uEnv.txt` ]]; then
 			echo "--No need to update"
 		else
 			today=`date +%Y-%m-%d.%H:%M:%S`
