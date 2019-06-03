@@ -501,6 +501,7 @@ void SX1272::writeRegister(byte address, byte data) {
   txbuf[0] = address;
   txbuf[1] = data;
   // digitalWriteSafely(SX1272_SS,HIGH);
+  maxWrite16();
 
 #if (SX1272_debug_mode > 1)
   printf("## Writing:  ##\tRegister ");
@@ -585,7 +586,7 @@ uint8_t SX1272::setLORA() {
         digitalWriteSafely(SX1272_RST,LOW);
     }
     */
-    printf("0x%X\r\n", st0);
+    // printf("0x%X\r\n", st0);
 
   } while (st0 != LORA_STANDBY_MODE); // LoRa standby mode
 
