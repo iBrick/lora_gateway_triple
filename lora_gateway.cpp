@@ -474,8 +474,6 @@ char loraPower = 'x';
 char loraPower = 'M';
 #endif
 
-uint8_t loraAddr = LORA_ADDR;
-
 int status_counter = 0;
 unsigned long startDoCad, endDoCad;
 bool extendedIFS = true;
@@ -526,7 +524,7 @@ long getCmdValue(int &i, char *strBuff = NULL) {
     return (atol(seqStr));
 }
 
-void startConfig() {
+void startConfig(int channel, int mode, int addr, int dbm) {
 
   int e;
 
@@ -566,33 +564,33 @@ void startConfig() {
 
     // Set transmission mode and print the result
     PRINT_CSTSTR("%s", "^$LoRa mode ");
-    PRINT_VALUE("%d", loraMode);
+    PRINT_VALUE("%d", mode);
     PRINTLN;
 
-    e = sx1272.setMode(loraMode);
+    e = sx1272.setMode(mode);
     PRINT_CSTSTR("%s", "^$Setting mode: state ");
     PRINT_VALUE("%d", e);
     PRINTLN;
 
 #ifdef LORA_LAS
-    loraLAS.setSIFS(loraMode);
+    loraLAS.setSIFS(mode);
 #endif
 
-    if (loraMode > 7)
+    if (mode > 7)
       SIFS_cad_number = 6;
     else
       SIFS_cad_number = 3;
   }
 
   // Select frequency channel
-  if (loraMode == 11) {
+  if (mode == 11) {
     // if we start with mode 11, then switch to 868.1MHz for LoRaWAN test
     // Note: if you change to mode 11 later using command /@M11# for instance,
     // you have to use /@C18# to change to the correct channel
     e = sx1272.setChannel(CH_18_868);
     PRINT_CSTSTR("%s", "^$Channel CH_18_868: state ");
   } else {
-    e = sx1272.setChannel(loraChannel);
+    e = sx1272.setChannel(loraChannelArray[channel]);
 
     if (optFQ > 0.0) {
       PRINT_CSTSTR("%s", "^$Frequency ");
@@ -600,12 +598,12 @@ void startConfig() {
       PRINT_CSTSTR("%s", ": state ");
     } else {
 #ifdef BAND868
-      if (loraChannelIndex > 5) {
+      if (channel > 5) {
         PRINT_CSTSTR("%s", "^$Channel CH_1");
-        PRINT_VALUE("%d", loraChannelIndex - 6);
+        PRINT_VALUE("%d", channel - 6);
       } else {
         PRINT_CSTSTR("%s", "^$Channel CH_0");
-        PRINT_VALUE("%d", loraChannelIndex + STARTING_CHANNEL);
+        PRINT_VALUE("%d", channel + STARTING_CHANNEL);
       }
       PRINT_CSTSTR("%s", "_868: state ");
 #elif defined BAND900
@@ -636,10 +634,10 @@ void startConfig() {
 #endif
 
   // Select output power in dBm
-  e = sx1272.setPowerDBM((uint8_t)MAX_DBM);
+  e = sx1272.setPowerDBM((uint8_t)dbm);
 
   PRINT_CSTSTR("%s", "^$Set LoRa power dBm to ");
-  PRINT_VALUE("%d", (uint8_t)MAX_DBM);
+  PRINT_VALUE("%d", (uint8_t)dbm);
   PRINTLN;
 
   PRINT_CSTSTR("%s", "^$Power: state ");
@@ -668,11 +666,11 @@ void startConfig() {
   }
 
   // Set the node address and print the result
-  // e = sx1272.setNodeAddress(loraAddr);
-  sx1272._nodeAddress = loraAddr;
+  // e = sx1272.setNodeAddress(addr);
+  sx1272._nodeAddress = addr;
   e                   = 0;
   PRINT_CSTSTR("%s", "^$LoRa addr ");
-  PRINT_VALUE("%d", loraAddr);
+  PRINT_VALUE("%d", addr);
   PRINT_CSTSTR("%s", ": state ");
   PRINT_VALUE("%d", e);
   PRINTLN;
@@ -699,30 +697,9 @@ void startConfig() {
 #endif
 }
 
-void setup(char *devpath) {
+void setup(char *devpath, int channel, int mode, int addr, int dbm) {
   int e;
-#ifdef ARDUINO
-  delay(3000);
-  randomSeed(analogRead(14));
-
-  // Open serial communications and wait for port to open:
-#  ifdef __SAMD21G18A__
-  SerialUSB.begin(38400);
-#  else
-  Serial.begin(38400);
-#  endif
-
-#  if defined ARDUINO && defined SHOW_FREEMEMORY &&                            \
-      not defined __MK20DX256__ && not defined __MKL26Z64__ &&                 \
-      not defined __SAMD21G18A__ && not defined _VARIANT_ARDUINO_DUE_X_
-  // Print a start message
-  Serial.print(freeMemory());
-  Serial.println(F(" bytes of free memory."));
-#  endif
-
-#else
   srand(time(NULL));
-#endif
 
   // Power ON the module
   e = sx1272.ON(devpath);
@@ -764,12 +741,6 @@ void setup(char *devpath) {
 
 #ifdef CAD_TEST
   PRINT_CSTSTR("%s", "Do CAD test\n");
-#endif
-
-#if not defined ARDUINO && defined DOWNLINK
-
-  lastDownlinkCheckTime = millis();
-
 #endif
 }
 
@@ -1221,7 +1192,7 @@ void loop(char *devpath) {
       PRINTLN;
 
       // set back the gateway address
-      sx1272._nodeAddress = loraAddr;
+      sx1272._nodeAddress = addr;
 
 #else
       // print to stdout the content of the packet
@@ -1984,30 +1955,25 @@ int main(int argc, char *argv[]) {
     }
   }
 
-#  ifdef WINPUT
-  // set termios options to remove echo and to have non blocking read from
-  // standard input (e.g. keyboard)
-  struct termios old = {0};
-  if (tcgetattr(0, &old) < 0)
-    perror("tcsetattr()");
-  // non-blocking noncanonical mode
-  old.c_lflag &= ~ICANON;
-  old.c_lflag &= ~ECHO;
-  // VMIN and VTIME are 0 for non-blocking
-  old.c_cc[VMIN]  = 0;
-  old.c_cc[VTIME] = 0;
+  if (argc < 6) {
+    printf("Usage: sudo %s %s %s %s %s\r\n\r\n%s\r\n", argv[0], "spi_device", "lora_channel(index in array below)", "lora_mode", "lora_addr", "max_dbm(14 recommended)",
+  "CH_04_868, CH_05_868, CH_06_868, CH_07_868, CH_08_868, CH_09_868, CH_10_868, CH_11_868,
+   CH_12_868, CH_13_868, CH_14_868, CH_15_868, CH_16_868, CH_17_868, CH_18_868");
+   return (-1);
+  }
 
-  if (tcsetattr(0, TCSANOW, &old) < 0)
-    perror("tcsetattr ICANON");
+  char *devpath = argv[1];
+  int channel   = argv[2];
+  int mode      = argv[3];
+  int addr      = argv[4];
+  int dbm       = argv[5];
 
-  // we catch the CTRL-C key
-  signal(SIGINT, INThandler);
-#  endif
+  // while (setup_radio(devpath, channel, mode, addr, dbm))
 
-  setup(argv[1]);
+  setup(devpath, channel, mode, addr, dbm);
 
   while (1) {
-    loop(argv[1]);
+    loop(devpath, channel, mode, addr, dbm);
   }
 
   return (0);

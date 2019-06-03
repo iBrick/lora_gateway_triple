@@ -17,52 +17,39 @@
 
 using namespace std;
 
-#define LORAMODE 1
-#define LORA_ADDR 1
-#define MAX_DBM 14
-
-#define STARTING_CHANNEL 4
-#define ENDING_CHANNEL 18
-
-#ifndef LCI
-#  define LCI (6)
-#endif
-uint8_t loraChannelIndex    = LCI;
 uint32_t loraChannelArray[] = {CH_04_868, CH_05_868, CH_06_868, CH_07_868,
                                CH_08_868, CH_09_868, CH_10_868, CH_11_868,
                                CH_12_868, CH_13_868, CH_14_868, CH_15_868,
                                CH_16_868, CH_17_868, CH_18_868};
 
-uint8_t loraMode     = LORAMODE;
-uint8_t loraAddr     = LORA_ADDR;
-uint32_t loraChannel = loraChannelArray[loraChannelIndex];
+uint8_t loraAddr = LORA_ADDR;
 
-void startConfig() {
+void startConfig(int channel, int mode, int addr, int dbm) {
 
   printf("%s\r\n", "Started configuration process");
   int e;
 
-  e = sx1272.setMode(loraMode);
+  e = sx1272.setMode(mode);
 
-  e = sx1272.setChannel(loraChannel);
+  e = sx1272.setChannel(loraChannelArray[channel]);
 
 #ifdef PABOOST
   sx1272._needPABOOST = true;
 #endif
 
-  e = sx1272.setPowerDBM((uint8_t)MAX_DBM);
+  e = sx1272.setPowerDBM((uint8_t)dbm);
 
   e = sx1272.setPreambleLength(8);
 
   // e = sx1272.setNodeAddress(loraAddr);
-  sx1272._nodeAddress = loraAddr;
+  sx1272._nodeAddress = addr;
 
   // sx1272._rawFormat = true;
 
   printf("%s\r\n", "SX1272/76 configured");
 }
 
-int setup_radio(char *devpath) {
+int setup_radio(char *devpath, int channel, int mode, int addr, int dbm) {
 
   printf("%s\r\n", "Started setup process");
   int e;
@@ -71,7 +58,7 @@ int setup_radio(char *devpath) {
   e = sx1272.getSyncWord();
 
   if (!e) {
-    startConfig();
+    startConfig(channel, mode, addr, dbm);
   }
 
   delay(1000);
@@ -119,14 +106,20 @@ void loop(void) {
 int main(int argc, char *argv[]) {
   setbuf(stdout, NULL); // disable buffering // debug
 
-  if (argc > 0)
-    printf("%s\r\n", argv[0]);
-  if (argc > 1)
-    printf("%s\r\n", argv[1]);
-  if (argc > 2)
-    printf("%s\r\n", argv[2]);
+  if (argc < 6) {
+    printf("Usage: sudo %s %s %s %s %s\r\n\r\n%s\r\n", argv[0], "spi_device", "lora_channel(index in array below)", "lora_mode", "lora_addr", "max_dbm(14 recommended)",
+  "CH_04_868, CH_05_868, CH_06_868, CH_07_868, CH_08_868, CH_09_868, CH_10_868, CH_11_868,
+   CH_12_868, CH_13_868, CH_14_868, CH_15_868, CH_16_868, CH_17_868, CH_18_868");
+   return (-1);
+  }
 
-  while (setup_radio(argv[1])) {
+  char *devpath = argv[1];
+  int channel   = argv[2];
+  int mode      = argv[3];
+  int addr      = argv[4];
+  int dbm       = argv[5];
+
+  while (setup_radio(devpath, channel, mode, addr, dbm)) {
   }
   while (1) {
     loop();
