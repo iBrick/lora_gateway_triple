@@ -1,6 +1,6 @@
 include radio.makefile
 
-lora_gateway_full: lora_gateway downlinker
+lora_gateway_full: uplinker downlinker
 
 downlinker: downlinker.o arduPi_bb.o SX1272_bb.o SPI.o GPIO.o Base64.o
 	g++ -lrt -lpthread SPI.o GPIO.o downlinker.o Base64.o arduPi_bb.o SX1272_bb.o -o downlinker
@@ -17,8 +17,8 @@ SPI.o: SPI.c SPI.h
 Base64.o: Base64.h Base64.cpp
 	g++ -lrt -lpthread -c Base64.cpp -o Base64.o
 
-lora_gateway: lora_gateway.o arduPi_bb.o SX1272_bb.o
-	g++ -lrt -lpthread SPI.o GPIO.o lora_gateway.o Base64.o arduPi_bb.o SX1272_bb.o -o lora_gateway	
+uplinker: lora_gateway.o arduPi_bb.o SX1272_bb.o
+	g++ -lrt -lpthread SPI.o GPIO.o lora_gateway.o Base64.o arduPi_bb.o SX1272_bb.o -o uplinker	
 
 lora_gateway.o: lora_gateway.cpp radio.makefile gateway_conf.json
 	g++ $(CFLAGS) -DRASPBERRY -DBEAGLEBONE -DIS_RCV_GATEWAY -c lora_gateway.cpp -o lora_gateway.o
