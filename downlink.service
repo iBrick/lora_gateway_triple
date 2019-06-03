@@ -1,7 +1,7 @@
 [Unit]
 
 Description=LoRa messages sender
-After=mqttclient.service
+Before=mqttclient.service
 StartLimitIntervalSec=1
 [Service]
 Restart=always
