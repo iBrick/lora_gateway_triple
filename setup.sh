@@ -4,6 +4,7 @@ if  [[ `whoami` == "root" ]]; then
 else
 	(
 		echo "-Starting setup"
+		cd /home/pi/lora_gateway
 		echo "-Fetching latest changes from repository"
 		git pull
 		echo "-Updating cape driver (reboot may be required)"
