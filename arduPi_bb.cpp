@@ -40,9 +40,10 @@ SPIPi::SPIPi() {
 #define SPI_PORT (BBBIO_McSPI_SPI1)
 
 void SPIPi::begin(char *devpath) {
-  if (SPI_DEV1_init(SPIDEV_BYTES_NUM, SPIDEV1_BUS_SPEED_HZ, SPI_SS_LOW,
-                    SPIDEV_DELAY_US, SPIDEV_DATA_BITS_NUM, SPI_MODE0,
-                    devpath) == -1)
+  if (SPI_DEV1_init(
+          SPIDEV_BYTES_NUM, SPIDEV1_BUS_SPEED_HZ,
+          SPI_SS_HIGH, // was LOW, denying to change SS between transactions
+          SPIDEV_DELAY_US, SPIDEV_DATA_BITS_NUM, SPI_MODE0, devpath) == -1)
     printf("(Main)spidev1.0 initialization failed\r\n");
   else
     printf("(Main)spidev1.0 initialized - READY\r\n");
@@ -182,6 +183,7 @@ int analogRead (int pin){
                 selected_channel[0] = 0xFC;
         }
         
+
 
 
         Wire.begin();
