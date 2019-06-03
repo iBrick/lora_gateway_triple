@@ -729,7 +729,7 @@ void setup(char *devpath, int channel, int mode, int addr, int dbm) {
 
   if (!e) {
     radioON = true;
-    startConfig();
+    startConfig(channel, mode, addr, dbm);
   }
 
   FLUSHOUTPUT;
@@ -1025,7 +1025,7 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
 
         if (!e) {
           radioON = true;
-          startConfig();
+          startConfig(channel, mode, addr, dbm);
         }
         // to start over
         status_counter = 0;
@@ -1459,7 +1459,7 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
 
             if (!e) {
               radioON = true;
-              startConfig();
+              startConfig(channel, mode, addr, dbm);
             }
 
             delay(500);
