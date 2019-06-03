@@ -168,7 +168,7 @@
     fragment@4 {
         target = <&spi0>;
         __overlay__ {
-			#address-cells = <4>;
+			#address-cells = <2>;
 			#size-cells = <0>;
 			
 			cs-gpios = <&gpio0 14 0>, <&gpio1 17 0>, <&gpio1 19 0>;
