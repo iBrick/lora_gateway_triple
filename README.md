@@ -214,7 +214,7 @@ GPS - приёмник
 	sudo systemctl start umtskeeper
 
 MQTTClientLoRa установка и настройка
---------------------------------------------------
+------------------------------------
 	Upload MQTTClientLoRa-1.0-SNAPSHOT.zip to home directory
 
 	unzip MQTTClientLoRa-1.0-SNAPSHOT.zip
@@ -236,7 +236,7 @@ MQTTClientLoRa установка и настройка
 	sudo systemctl start mqttclient
 
 Активация GUI
---------------------------------------------------
+-------------
 	sudo apt install xorg
 
 	sudo nano /etc/rc.local
@@ -275,6 +275,12 @@ Internet over USB
 	echo "nameserver 8.8.8.8" >> /etc/resolv.conf
 
 	или выполнить скрипт getinternetfromusb.sh из директории lora_gateway
+
+Оптимизация системы
+-------------------
+Отключите необязательные сервисы
+
+	sudo systemctl disable bonescript-autorun.service
 
 Настройка автозапуска устройства
 =========================
