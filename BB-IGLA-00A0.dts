@@ -51,9 +51,10 @@
 		"P9.18", // MOSI
 		"P9.21", // MISO
 		"P9.22", // SCK
-		"P9.26", "gpio0_14", // NSS0
-		"P9.23", "gpio1_17", // NSS1
-		"P9.16", "gpio1_19"; // NSS2
+
+		"P9.26", //?"gpio0_14", // NSS0
+		"P9.23", //?"gpio1_17", // NSS1
+		"P9.16", //?"gpio1_19"; // NSS2
 
 	/*
 	 * Free up the pins used by the cape from the pinmux helpers.
@@ -104,10 +105,6 @@
 					BONE_P8_09 (PIN_OUTPUT | MUX_MODE7)
 
 					BONE_P8_18 (PIN_OUTPUT | MUX_MODE7)
-
-                    BONE_P9_26 (PIN_OUTPUT | MUX_MODE7)
-					BONE_P9_23 (PIN_OUTPUT | MUX_MODE7)
-					BONE_P9_16 (PIN_OUTPUT | MUX_MODE7)
 				>;
 			};
 
@@ -129,6 +126,10 @@
                     BONE_P9_18 (PIN_OUTPUT_PULLUP | MUX_MODE0)     // MOSI
                     BONE_P9_21 (PIN_INPUT_PULLUP  | MUX_MODE0)     // MISO
                     BONE_P9_22 (PIN_INPUT_PULLUP  | MUX_MODE0)     // SCLK
+
+                    BONE_P9_26 (PIN_OUTPUT | MUX_MODE7)  // NSS0
+					BONE_P9_23 (PIN_OUTPUT | MUX_MODE7)  // NSS1
+					BONE_P9_16 (PIN_OUTPUT | MUX_MODE7)  // NSS2
                 >;
             };
 
@@ -167,17 +168,31 @@
     fragment@4 {
         target = <&spi0>;
         __overlay__ {
-             #address-cells = <1>;
-             #size-cells = <0>;
-            
-             status = "okay";
-             pinctrl-names = "default";
-             pinctrl-0 = <&sx1276_pins>;
+			#address-cells = <4>;
+			#size-cells = <0>;
+			
+			cs-gpios = <&gpio0 14 0>, <&gpio1 17 0>, <&gpio1 19 0>;
 
-             spidev@0 {
-                 spi-max-frequency = <24000000>;
-                 reg = <0>;
-                 compatible = "linux,spidev";
+			status = "okay";
+			pinctrl-names = "default";
+			pinctrl-0 = <&sx1276_pins>;
+
+			spidev@0 {
+				spi-max-frequency = <24000000>;
+				reg = <0>;
+				compatible = "linux,spidev";
+            };
+
+			spidev@1 {
+				spi-max-frequency = <24000000>;
+				reg = <1>;
+				compatible = "linux,spidev";
+            };
+
+			spidev@2 {
+				spi-max-frequency = <24000000>;
+				reg = <2>;
+				compatible = "linux,spidev";
             };
         };
     };
@@ -242,24 +257,6 @@
 					default-state = "off";
 				};
 
-				module0 {
-					label = "_module0";
-					gpios = <&gpio0 14 1>; /* flag 1 means active low */
-					linux,default-trigger = "none";
-					default-state = "off";
-				};
-				module1 {
-					label = "_module1";
-					gpios = <&gpio1 17 1>; /* flag 1 means active low */
-					linux,default-trigger = "none";
-					default-state = "off";
-				};
-				module2 {
-					label = "_module2";
-					gpios = <&gpio1 19 1>; /* flag 1 means active low */
-					linux,default-trigger = "none";
-					default-state = "off";
-				};
 			};
 			
 		};
