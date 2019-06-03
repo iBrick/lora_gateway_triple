@@ -19,7 +19,7 @@ SPI.o: SPI.c SPI.h
 Base64.o: Base64.h Base64.cpp
 	g++ -lrt -lpthread -c Base64.cpp -o Base64.o
 
-uplinker: lora_gateway.o arduPi_bb.o SX1272_bb.o
+uplinker: lora_gateway.o arduPi_bb.o SX1272_bb.o SPI.o GPIO.o
 	g++ -lrt -lpthread SPI.o GPIO.o lora_gateway.o Base64.o arduPi_bb.o SX1272_bb.o -o uplinker	
 
 lora_gateway.o: lora_gateway.cpp radio.makefile gateway_conf.json
@@ -28,7 +28,7 @@ lora_gateway.o: lora_gateway.cpp radio.makefile gateway_conf.json
 arduPi.o: arduPi.cpp arduPi.h
 	g++ -c arduPi.cpp -o arduPi.o	
 
-arduPi_bb.o: arduPi_bb.cpp arduPi_bb.h
+arduPi_bb.o: arduPi_bb.cpp arduPi_bb.h SPI.o
 	g++ -l SPI.o -l GPIO.o -c arduPi_bb.cpp -o arduPi_bb.o
 
 SX1272.o: SX1272.cpp SX1272.h
