@@ -22,7 +22,7 @@ else
 		fi;
 		echo "-Building executables"
 		make
-		echo "-Setting up sustemd services (to be run after mqttclient)"
+		echo "-Setting up systemd services (to be run after mqttclient)"
 		sudo ln -s /home/pi/lora_gateway/downlinker.service /etc/systemd/system/
 		sudo ln -s /home/pi/lora_gateway/uplinker_plain.service /etc/systemd/system/
 		sudo ln -s /home/pi/lora_gateway/uplinker_alarm.service /etc/systemd/system/
