@@ -11,7 +11,7 @@ else
 		git pull
 		echo "-Updating cape driver (reboot may be required)"
 		sudo bash update_cape.sh
-		echo "-Setting up uEnv.txt (backing up previous to uEnv.txt.bk)"
+		echo "-Setting up uEnv.txt"
 		if cmp -s "/boot/uEnv.txt" "/home/pi/lora_gateway/uEnv.txt"; then
 			echo "--No need to update"
 		else
