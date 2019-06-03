@@ -123,6 +123,7 @@ Login as user 'pi'
 - модули для python2: `python-requests`
 
 		sudo apt install python3 python3-gi python3-click python3-gi-cairo python3-cairo gir1.2-gtk-3.0 python3-sqlalchemy python3-psycopg2 python-requests -y
+		sudo pip3 install paho-mqtt
 
 Java installation
 
@@ -272,7 +273,19 @@ MQTTClientLoRa установка и настройка
 		
 	download Igla GUI git repository to /home/pi: 
 	https://github.com/Renha/igla-gui 
-    
+	
+Автозапуск GUI от пользователя root:
+Поскольку графическому интерфейсу требуются права пользователя root для выполнения системных команд, нужно проделать следующие действия для автоматической загрузки интерфейса от имени root:
+1) sudo su
+2) nano /etc/systemd/system/getty.target.wants/getty\@tty1.service
+	строку "ExecStart=-/sbin/agetty --noclear %I $TERM"
+заменить на "ExecStart=-/sbin/agetty --autologin root --noclear %I $TERM"
+3) nano ~/.profile
+	добавить в конце файла строку: [ "$(tty)" = "/dev/tty1" ] && exec startx
+4) В заключении нужно установить правильный параметр default.target, чтобы система загружалась на консоль (TTY), а не в диспетчер дисплея: systemctl set-default multi-user.target  
+Отменить изменение значения default.target можно с помощью команды: systemctl set-default graphical.target
+5) reboot
+
 Internet over USB
 --------------------------------------------------
 	sudo /sbin/route add default gw 192.168.7.1
