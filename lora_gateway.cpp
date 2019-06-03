@@ -2007,7 +2007,7 @@ int main(int argc, char *argv[]) {
   setup(argv[1]);
 
   while (1) {
-    loop();
+    loop(argv[1]);
   }
 
   return (0);
