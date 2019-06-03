@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
 
   if (argc < 6) {
     printf(
-        "Usage: sudo %s %s %s %s %s\r\n\r\n%s\r\n", argv[0], "spi_device",
+        "Usage: sudo %s %s %s %s %s %s\r\n\r\n%s\r\n", argv[0], "spi_device",
         "lora_channel(index in array below)", "lora_mode", "lora_addr",
         "max_dbm(14 recommended)",
         "CH_04_868, CH_05_868, CH_06_868, CH_07_868, CH_08_868, CH_09_868, CH_10_868, CH_11_868,\
