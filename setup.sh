@@ -23,9 +23,9 @@ else
 		echo "-Building executables"
 		make
 		echo "-Setting up systemd services (to be run after mqttclient)"
-		sudo ln -s /home/pi/lora_gateway/downlinker.service /etc/systemd/system/
-		sudo ln -s /home/pi/lora_gateway/uplinker_plain.service /etc/systemd/system/
-		sudo ln -s /home/pi/lora_gateway/uplinker_alarm.service /etc/systemd/system/
+		sudo ln -s /home/pi/lora_gateway/downlink.service /etc/systemd/system/
+		sudo ln -s /home/pi/lora_gateway/uplink_plain.service /etc/systemd/system/
+		sudo ln -s /home/pi/lora_gateway/uplink_alarm.service /etc/systemd/system/
 		echo "-TODO: time setup, write time to RTC."
 		echo "-Setup finished. You may restart now."
 	)
