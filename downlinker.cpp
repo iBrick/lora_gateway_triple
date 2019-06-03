@@ -69,14 +69,14 @@ unsigned char decoded[256];
 void loop(void) {
   FILE *fp = fopen("/home/pi/lora_gateway/downlink/downlink.txt", "r");
   if (fp) {
-    printf("%s\r\n", "File exists");
+    // printf("%s\r\n", "File exists");
     fseek(fp, 0, SEEK_END);
     int size_fromfile = ftell(fp);
     fseek(fp, 0, SEEK_SET);
 
     if (size_fromfile > 1 && size_fromfile < 2048) {
 
-      printf("%s\r\n", "File has correct size");
+      // printf("%s\r\n", "File has correct size");
       fread(fromfile, 1, size_fromfile, fp);
       fclose(fp);
 
@@ -94,8 +94,9 @@ void loop(void) {
         } else
           remove("/home/pi/lora_gateway/downlink/downlink.txt");
       }
-    } else
+    } else {
       fclose(fp);
+    }
   }
   delay(10);
   // delay(10000); // debug: send not more often than 10 seconds
