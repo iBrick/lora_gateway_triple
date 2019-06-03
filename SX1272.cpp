@@ -592,6 +592,7 @@ uint8_t SX1272::setLORA() {
         digitalWriteSafely(SX1272_RST,LOW);
     }
     */
+    printf("%s\r\n", st0);
 
   } while (st0 != LORA_STANDBY_MODE); // LoRa standby mode
 
