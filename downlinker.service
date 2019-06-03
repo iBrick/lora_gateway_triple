@@ -6,7 +6,7 @@ StartLimitIntervalSec=1
 [Service]
 Restart=always
 RestartSec=1
-ExecStart=/home/pi/lora_gateway/downlinker /dev/spidev0.1 6 1 1 14 | python /home/pi/lora_gateway/post_processing_gw.py
+ExecStart=/home/pi/lora_gateway/downlinker /dev/spidev0.1 6 1 1 14
 
 [Install]
 WantedBy=multi-user.target
