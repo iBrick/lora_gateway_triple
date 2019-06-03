@@ -462,7 +462,7 @@ public:
 	\param void
 	\return uint8_t setLORA state
 	 */
-	uint8_t ON();
+	uint8_t ON(char*devpath);
 
 	//! It puts the module OFF
   	/*!
