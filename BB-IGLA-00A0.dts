@@ -54,7 +54,7 @@
 
 		"P9.26", //?"gpio0_14", // NSS0
 		"P9.23", //?"gpio1_17", // NSS1
-		"P9.16", //?"gpio1_19"; // NSS2
+		"P9.16"; //?"gpio1_19"; // NSS2
 
 	/*
 	 * Free up the pins used by the cape from the pinmux helpers.
