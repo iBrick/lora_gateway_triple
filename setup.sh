@@ -22,8 +22,8 @@ else
 		make
 		echo "-Setting up sustemd services (to be run after mqttclient)"
 		sudo ln -s /home/pi/lora_gateway/downlinker.service /etc/systemd/system/
-		sudo ln -s /home/pi/lora_gateway/uplinker-plain.service /etc/systemd/system/
-		sudo ln -s /home/pi/lora_gateway/uplinker-alarm.service /etc/systemd/system/
+		sudo ln -s /home/pi/lora_gateway/uplinker_plain.service /etc/systemd/system/
+		sudo ln -s /home/pi/lora_gateway/uplinker_alarm.service /etc/systemd/system/
 		echo "-TODO: time setup, write time to RTC."
 		echo "-Setup finished. You may restart now."
 	)
