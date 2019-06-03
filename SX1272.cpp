@@ -512,13 +512,6 @@ void SX1272::writeRegister(byte address, byte data) {
 #endif
 }
 
-/*
- Function: It gets the temperature from the measurement block module.
- Returns: Integer that determines if there has been any error
-   state = 2  --> The command has not been executed
-   state = 1  --> There has been an error while executing the command
-   state = 0  --> The command has been executed with no errors
-*/
 void SX1272::maxWrite16() { SPI.transfernb(txbuf, rxbuf, 2); }
 
 /*
