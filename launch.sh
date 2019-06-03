@@ -5,6 +5,9 @@
 killall uplinker ; killall downlinker
 (
     cd /home/pi/lora_gateway
+    
+    mkdir log
+
     ./uplinker /dev/spidev0.0 4 1 1 14 | python post_processing_gw.py &> log/uplinker_plain &
     ./downlinker /dev/spidev0.1 6 1 1 14 > log/downlinker &
     ./uplinker /dev/spidev0.2 8 1 1 14 | python post_processing_gw.py &> log/uplinker_alarm &
