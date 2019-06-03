@@ -870,7 +870,7 @@ int CarrierSense(bool onlyOnce = false) {
   return 0;
 }
 
-void loop(char *devpath) {
+void loop(char *devpath, int channel, int mode, int addr, int dbm) {
   int i = 0, e;
   int cmdValue;
 
