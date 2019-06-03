@@ -19,7 +19,7 @@ SPI.o: SPI.c SPI.h
 Base64.o: Base64.h Base64.cpp
 	g++ $(debug) -lrt -lpthread -c Base64.cpp -o Base64.o
 
-uplinker: lora_gateway.o arduPi_bb.o SX1272_bb.o SPI.o GPIO.o
+uplinker: lora_gateway.o Base64.o arduPi_bb.o SX1272_bb.o SPI.o GPIO.o
 	g++ $(debug) -lrt -lpthread SPI.o GPIO.o lora_gateway.o Base64.o arduPi_bb.o SX1272_bb.o -o uplinker	
 
 lora_gateway.o: lora_gateway.cpp radio.makefile gateway_conf.json
