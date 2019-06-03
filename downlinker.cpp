@@ -62,12 +62,12 @@ void startConfig() {
   printf("%s\r\n", "SX1272/76 configured");
 }
 
-int setup_radio() {
+int setup_radio(char *devpath) {
 
   printf("%s\r\n", "Started setup process");
   int e;
 
-  e = sx1272.ON();
+  e = sx1272.ON(devpath);
   e = sx1272.getSyncWord();
 
   if (!e) {
@@ -119,7 +119,14 @@ void loop(void) {
 int main(int argc, char *argv[]) {
   setbuf(stdout, NULL); // disable buffering // debug
 
-  while (setup_radio()) {
+  if (argc > 0)
+    printf("%s\r\n", argv[0]);
+  if (argc > 1)
+    printf("%s\r\n", argv[1]);
+  if (argc > 2)
+    printf("%s\r\n", argv[2]);
+
+  while (setup_radio(argv[1])) {
   }
   while (1) {
     loop();

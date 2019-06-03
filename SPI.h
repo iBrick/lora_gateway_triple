@@ -85,7 +85,8 @@ extern int SPI_DEV1_init(unsigned long spi_bytes_no,
                          unsigned char chip_select,
                          unsigned short spi_delay,
                          unsigned char spi_bits_No,
-                         unsigned char mode_spi);
+                         unsigned char mode_spi,
+                         char *devpath);
 extern int SPIDEV1_transfer(unsigned char *send,
                             unsigned char *receive,
                             unsigned char bytes_num);

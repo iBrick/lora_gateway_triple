@@ -311,7 +311,7 @@ void SX1272::RxChainCalibration() {
  Function: Sets the module ON.
  Returns: uint8_t setLORA state
 */
-uint8_t SX1272::ON() {
+uint8_t SX1272::ON(char *devpath) {
   uint8_t state = 2;
 
 #if (SX1272_debug_mode > 1)
@@ -326,7 +326,7 @@ uint8_t SX1272::ON() {
   delay(100);
 
   // Configure the MISO, MOSI, CS, SPCR.
-  SPI.begin();
+  SPI.begin(devpath);
   // Set Most significant bit first
   SPI.setBitOrder(MSBFIRST);
   // Divide the clock frequency

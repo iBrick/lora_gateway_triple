@@ -699,7 +699,7 @@ void startConfig() {
 #endif
 }
 
-void setup() {
+void setup(char *devpath) {
   int e;
 #ifdef ARDUINO
   delay(3000);
@@ -725,7 +725,7 @@ void setup() {
 #endif
 
   // Power ON the module
-  e = sx1272.ON();
+  e = sx1272.ON(devpath);
 
   PRINT_CSTSTR("%s", "^$**********Power ON: state ");
   PRINT_VALUE("%d", e);
@@ -2004,7 +2004,7 @@ int main(int argc, char *argv[]) {
   signal(SIGINT, INThandler);
 #  endif
 
-  setup();
+  setup(argv[1]);
 
   while (1) {
     loop();
