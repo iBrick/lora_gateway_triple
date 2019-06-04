@@ -85,14 +85,16 @@ void loop(void) {
         size_fromfile--;
 
       if (size_fromfile) {
-        printf("%s\r\n", "Sending...");
         int size_decoded =
             base64_decode((char *)decoded, (char *)fromfile, size_fromfile);
+        printf("Sending package of %i bytes ... ", size_decoded);
         if (sx1272.sendPacketMAXTimeout(255, decoded, size_decoded)) {
-          printf("%s\r\n", "Failed, will retry in a second");
+          printf("%s\r\n", "failed, will retry in a second");
           delay(1000);
-        } else
+        } else {
           remove("/home/pi/lora_gateway/downlink/downlink.txt");
+          printf("%s\r\n", "done");
+        }
       }
     } else {
       fclose(fp);
