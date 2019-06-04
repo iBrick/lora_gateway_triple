@@ -22,31 +22,6 @@ uint32_t loraChannelArray[] = {CH_04_868, CH_05_868, CH_06_868, CH_07_868,
                                CH_12_868, CH_13_868, CH_14_868, CH_15_868,
                                CH_16_868, CH_17_868, CH_18_868};
 
-void startConfig(int channel, int mode, int addr, int dbm) {
-
-  printf("%s\r\n", "Started configuration process");
-  int e;
-
-  e = sx1272.setMode(mode);
-
-  e = sx1272.setChannel(loraChannelArray[channel]);
-
-#ifdef PABOOST
-  sx1272._needPABOOST = true;
-#endif
-
-  e = sx1272.setPowerDBM((uint8_t)dbm);
-
-  e = sx1272.setPreambleLength(8);
-
-  // e = sx1272.setNodeAddress(addr);
-  sx1272._nodeAddress = addr;
-
-  // sx1272._rawFormat = true;
-
-  printf("%s\r\n", "SX1272/76 configured");
-}
-
 int setup_radio(char *devpath, int channel, int mode, int addr, int dbm) {
 
   printf("%s\r\n", "Started setup process");
@@ -56,12 +31,26 @@ int setup_radio(char *devpath, int channel, int mode, int addr, int dbm) {
   e = sx1272.getSyncWord();
 
   if (!e) {
-    startConfig(channel, mode, addr, dbm);
+    printf("%s\r\n", "Started configuration process");
+    int e;
+
+    e = sx1272.setMode(mode);
+    e = sx1272.setChannel(loraChannelArray[channel]);
+#ifdef PABOOST
+    sx1272._needPABOOST = true;
+#endif
+    e = sx1272.setPowerDBM((uint8_t)dbm);
+    e = sx1272.setPreambleLength(8);
+    // e = sx1272.setNodeAddress(addr);
+    sx1272._nodeAddress = addr;
+    // sx1272._rawFormat = true;
+
+    printf("%s\r\n", "SX1272/76 configured");
   }
 
   delay(1000);
-  return e;
   printf("%s\r\n", "Radio setup finished");
+  return e;
 }
 
 unsigned char fromfile[2048];
