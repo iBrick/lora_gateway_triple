@@ -5314,6 +5314,9 @@ uint8_t SX1272::sendWithTimeout(uint16_t wait) {
     // while ((bitRead(value, 3) == 0) && (millis() - previous < wait))
     while ((bitRead(value, 3) == 0) && (millis() < exitTime)) {
       value = readRegister(REG_IRQ_FLAGS);
+
+      printf("0x%X\r\n", value);
+      delay( 100 ); // 10 messages per second is enough
       // Condition to avoid an overflow (DO NOT REMOVE)
       // if( millis() < previous )
       //{
