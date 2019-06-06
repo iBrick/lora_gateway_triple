@@ -235,6 +235,19 @@ MQTTClientLoRa установка и настройка
 
 	sudo systemctl start mqttclient
 
+Поворот экрана
+--------------
+Создайте файл `/usr/share/X11/xorg.conf.d/90-rotate-touch.conf` с содержимым:
+
+	Section "InputClass"
+        	Identifier "ILITEK ILITEK-TP"
+        	MatchProduct "ILITEK ILITEK-TP"
+        	MatchDevicePath "/dev/input/event1"
+        	Option "TransformationMatrix" "-1 0 1 0 -1 1 0 0 1"
+	EndSection
+
+Добавьте в файл `/etc/X11/xorg.conf` строчку `Option "Rotate" "UD"` в секцию `Device`.
+
 Активация GUI
 -------------
 	sudo apt install xorg
