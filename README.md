@@ -235,8 +235,11 @@ MQTTClientLoRa установка и настройка
 
 	sudo systemctl start mqttclient
 
-Поворот экрана
---------------
+Настройка экрана
+----------------
+
+- Поворот экрана:
+
 Создайте файл `/usr/share/X11/xorg.conf.d/90-rotate-touch.conf` с содержимым:
 
 	Section "InputClass"
@@ -247,6 +250,14 @@ MQTTClientLoRa установка и настройка
 	EndSection
 
 Добавьте в файл `/etc/X11/xorg.conf` строчку `Option "Rotate" "UD"` в секцию `Device`.
+
+- Отключение "засыпания":
+
+Отредактируйте файл `/etc/X11/xorg.conf`, добавив следующую секцию:
+
+	Section "Extensions"
+        	Option  "DPMS"  "Disable"
+	EndSection
 
 Активация GUI
 -------------
