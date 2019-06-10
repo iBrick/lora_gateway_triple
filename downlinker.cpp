@@ -5,6 +5,8 @@
 
 #define BAND868
 
+#define PABOOST
+
 #include <getopt.h>
 #include <math.h>
 #include <signal.h>

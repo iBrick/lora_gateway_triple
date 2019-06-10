@@ -6,7 +6,7 @@ StartLimitIntervalSec=1
 [Service]
 Restart=always
 RestartSec=1
-ExecStart=/home/pi/lora_gateway/downlinker /dev/spidev0.1 4 5 1 20
+ExecStart=/home/pi/lora_gateway/downlinker /dev/spidev0.1 4 5 1 14
 
 [Install]
 WantedBy=multi-user.target
