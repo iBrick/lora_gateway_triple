@@ -172,37 +172,6 @@ double optFQ   = -1.0;
 uint8_t optSW  = 0x12;
 ///////////////////////////////////////////////////////////////////
 
-#if defined ARDUINO && defined SHOW_FREEMEMORY && not defined __MK20DX256__ && \
-    not defined __MKL26Z64__ && not defined __SAMD21G18A__ &&                  \
-    not defined _VARIANT_ARDUINO_DUE_X_
-int freeMemory() {
-  extern int __heap_start, *__brkval;
-  int v;
-  return (int)&v - (__brkval == 0 ? (int)&__heap_start : (int)__brkval);
-}
-#endif
-
-long getCmdValue(int &i, char *strBuff = NULL) {
-
-  char seqStr[7] = "******";
-
-  int j = 0;
-  // character '#' will indicate end of cmd value
-  while ((char)cmd[i] != '#' && (i < strlen(cmd)) && j < strlen(seqStr)) {
-    seqStr[j] = (char)cmd[i];
-    i++;
-    j++;
-  }
-
-  // put the null character at the end
-  seqStr[j] = '\0';
-
-  if (strBuff) {
-    strcpy(strBuff, seqStr);
-  } else
-    return (atol(seqStr));
-}
-
 void startConfig(int channel, int mode, int addr, int dbm) {
 
   int e;
