@@ -300,6 +300,71 @@ Internet over USB
 
 	или выполнить скрипт getinternetfromusb.sh из директории lora_gateway
 
+Настройка RTC
+-------------
+Создайте файл `/etc/udev/rules.d/55-i2c-rtc.rules` с содержимым:
+
+	SUBSYSTEM=="rtc", KERNEL=="rtc1", SYMLINK+="rtc", OPTIONS+="link_priority=10", TAG+="systemd"
+
+файл `/etc/systemd/system/i2c-rtc.service` с содержимым:
+
+	[Unit]
+		ConditionCapability=CAP_SYS_TIME
+		ConditionVirtualization=!container
+		DefaultDependencies=no
+		Wants=dev-rtc.device
+		After=dev-rtc.device
+		Before=systemd-timesyncd.service ntpd.service chrony.service
+	
+	[Service]
+		Type=oneshot
+		CapabilityBoundingSet=CAP_SYS_TIME
+		PrivateTmp=yes
+		ProtectSystem=full
+		ProtectHome=yes
+		DeviceAllow=/dev/rtc rw
+		DevicePolicy=closed
+		ExecStart=/sbin/hwclock -f /dev/rtc --hctosys
+	
+	[Install]
+		WantedBy=time-sync.target
+
+файл `/etc/systemd/system/systohc.service` с содержимым:
+
+	[Unit]
+		ConditionCapability=CAP_SYS_TIME
+		ConditionVirtualization=!container
+		DefaultDependencies=no
+		Wants=dev-rtc.device
+		After=systemd-timesyncd.service
+	
+	[Service]
+		Type=oneshot
+		CapabilityBoundingSet=CAP_SYS_TIME
+		PrivateTmp=yes
+		ProtectSystem=full
+		ProtectHome=yes
+		DeviceAllow=/dev/rtc rw
+		DevicePolicy=closed
+		ExecStart=/sbin/hwclock -f /dev/rtc --systohc
+
+и файл `/etc/systemd/system/systohc.timer` с содержимым:
+
+	[Unit]
+ 
+	[Timer]
+		OnUnitActiveSec=1h
+		OnBootSec=10s
+	
+	[Install]
+		WantedBy=timers.target
+
+затем активируйте необходимые сервисы:
+
+	sudo systemctl enable i2c-rtc systohc.timer
+
+Время автоматически будет установлено при работе устройства с активным подключением к интернету.
+
 Оптимизация системы
 -------------------
 Отключите необязательные сервисы
