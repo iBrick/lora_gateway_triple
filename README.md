@@ -630,38 +630,44 @@ igla/IGLA/Sensor8/DEF BfKNf+G+PcTT  - с шифрованием по ГОСТ
 MQTT принимает дальше приложение LoRa Parser, и сохраняет в БД Postgres 9.6. По умолчанию в Postgres используется БД igla , user/pass igla/igla
 
 ANNEX.A: LoRa mode and predefined channels
-Pre-defined LoRa modes (from initial Libelium SX1272.h)
+==========================================
 
-mode	BW	SF
-1	125	12
-2	250	12
-3	125	10
-4	500	12
-5	250	10
-6	500	11
-7	250	9
-8	500	9
-9	500	8
-10	500	7
-Pre-defined channels in 868MHz, 915MHz and 433MHz band (most of them from initial Libelium SX1272.h, except those marked with *). Frequencies in bold are those used by default in each band.
+Pre-defined LoRa modes (from initial Libelium `SX1272.h`)
 
-ch	F(MHz)	ch	F(MHz)	ch	F(MHz)
-04	863.2*	00	903.08	00	433.3*
-05	863.5*	01	905.24	01	433.6*
-06	863.8*	02	907.40	02	433.9*
-07	864.1*	03	909.56	03	434.3*
-08	864.4*	04	911.72	-	-
-09	864.7*	05	913.88	-	-
-10	865.2	06	916.04	-	-
-11	865.5	07	918.20	-	-
-12	865.8	08	920.36	-	-
-13	866.1	09	922.52	-	-
-14	866.4	10	924.68	-	-
-15	867.7	11	926.84	-	-
-16	867.0	12	915.00	-	-
-17	868.0	-	-	-	-
-18	868.1*	-	-	-	-
--	-	-	-	-	-
+| mode | BW | SF |
+|------|----|----|
+| 1    | 125| 12 |
+| 2    | 250| 12 |
+| 3    | 125| 10 |
+| 4    | 500| 12 |
+| 5    | 250| 10 |
+| 6    | 500| 11 |
+| 7    | 250|  9 |
+| 8    | 500|  9 |
+| 9    | 500|  8 |
+| 10   | 500|  7 |
+
+Pre-defined channels in 868MHz, 915MHz and 433MHz band (most of them from initial Libelium `SX1272.h`, except those marked with `*`). Frequencies in bold are those used by default in each band.
+
+| ch | F(MHz) | ch | F(MHz) | ch | F(MHz) |
+|----|--------|----|--------|----|--------|
+| 04 | 863.2* | 00 | 903.08 | **00** | **433.3*** |
+| 05 | 863.5* | 01 | 905.24 | 01 | 433.6* |
+| 06 | 863.8* | 02 | 907.40 | 02 | 433.9* |
+| 07 | 864.1* | 03 | 909.56 | 03 | 434.3* |
+| 08 | 864.4* | 04 | 911.72 |  - |   -    |
+| 09 | 864.7* | **05** | **913.88** |  - |   -    |
+| **10** | **865.2**  | 06 | 916.04 |  - |   -    |
+| 11 | 865.5  | 07 | 918.20 |  - |   -    |
+| 12 | 865.8  | 08 | 920.36 |  - |   -    |
+| 13 | 866.1  | 09 | 922.52 |  - |   -    |
+| 14 | 866.4  | 10 | 924.68 |  - |   -    |
+| 15 | 867.7  | 11 | 926.84 |  - |   -    |
+| 16 | 867.0  | 12 | 915.00 |  - |   -    |
+| 17 | 868.0  |  - |   -    |  - |   -    |
+| 18 | 868.1* |  - |   -    |  - |   -    |
+|  - |   -    |  - |   -    |  - |   -    |
+
 
 Low-cost LoRa gateway features and configuration tools
 ======================================================
