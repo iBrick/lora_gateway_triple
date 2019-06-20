@@ -130,8 +130,38 @@ Java installation
 
 	source ~/.bash_profile
 
-WiFi настройка
+WiFi настройка режима точки доступа
 --------------------------------------------------
+
+	sudo systemctl disable hostapd
+
+	sudo systemctl disable dnsmasq
+	
+	sudo connmanctl
+	
+	connmanctl> agent off
+	
+	connmanctl> disable wifi
+	
+	git clone https://github.com/oblique/create_ap.git
+	
+	cd create_ap
+	
+	make install
+	
+	sudo nano /etc/create_ap.conf
+	
+		- поменяйте SSID и Passphrase на желаемые
+ 	
+	sudo systemctl enable create_ap
+	
+	для проверки создания точки доступа команда: sudo create_ap --no-virt wlan0 eth0 testAP testtest
+	
+	для остановки других сервисов WiFi (если есть): sudo killall -9 wpa_supplicant
+
+WiFi настройка простого клиента (не нужно для production)
+--------------------------------------------------
+
 	sudo connmanctl
 
 	connmanctl> enable wifi
