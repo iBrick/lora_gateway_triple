@@ -29,6 +29,20 @@
 #include "SX1272.h"
 #include <math.h>
 
+#include <errno.h>
+#include <fcntl.h>
+#include <getopt.h>
+#include <math.h>
+#include <poll.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/time.h>
+#include <termios.h>
+#include <time.h>
+#include <unistd.h>
+
 /*  CHANGE LOGS by C. Pham
  *	August 28th, 2018
  *		- add a small delay in the availableData() loop that decreases
@@ -134,71 +148,7 @@ uint8_t sx1272_CAD_value[11]  = {0, 62, 31, 16, 16, 8, 9, 5, 3, 1, 1};
 // Public functions.
 //**********************************************************************/
 
-#ifndef ARDUINO
-
-#  define SS_STATE_FREE HIGH
-#  define SS_STATE_BLOCK LOW
-#  define SS_STATE_UNKNOWN (HIGH + LOW + 1)
-
-byte ss_state = SS_STATE_UNKNOWN;
-
-#  include <semaphore.h>
-#  define SPI_SEMAPHORE "/spi_shared_access"
-sem_t *spi_sem;
-
-void initSafeWrite() {
-  ss_state = SS_STATE_UNKNOWN;
-  // Create semaphore in locked state, so we could initialize everything:
-  spi_sem = sem_open(SPI_SEMAPHORE, O_CREAT | O_EXCL, 0777, 0);
-  if (spi_sem !=
-      SEM_FAILED) { // We are the first program of the pack reached that point
-    // init chip select lanes:
-    ss_state = SS_STATE_FREE;
-    digitalWrite(SX1272_SS, SS_STATE_FREE);
-    digitalWrite(SX1272_NSS1, SS_STATE_FREE);
-    digitalWrite(SX1272_NSS2, SS_STATE_FREE);
-    // free the semaphore so any program could start communication:
-    sem_post(spi_sem);
-  } else if (errno == EEXIST) {
-    spi_sem = sem_open(SPI_SEMAPHORE, 0);
-  }
-}
-
-void digitalWriteSafely(byte Pin, byte State) {
-  byte told = 0;
-  if (Pin == SX1272_SS && State == SS_STATE_BLOCK &&
-      ss_state != SS_STATE_BLOCK) {
-    // int sv= 0;
-    // sem_getvalue(spi_sem,&sv);
-    // printf("%d ",sv);
-    sem_wait(spi_sem);
-    // while(sem_trywait(spi_sem)) delay(1);
-    // printf("lock\r\n");
-  }
-  digitalWrite(Pin, State);
-  if (Pin == SX1272_SS && State == SS_STATE_FREE &&
-      ss_state == SS_STATE_BLOCK) {
-    sem_post(spi_sem);
-    // printf("unlock\r\n");
-  }
-  if (Pin == SX1272_SS)
-    ss_state = State;
-}
-
-#else
-
-void initSafeWrite() { digitalWrite(SX1272_SS, SS_STATE_FREE); }
-
-void digitalWriteSafely(byte Pin, byte State) {
-  // TODO: version with reading port values
-  digitalWrite(Pin, State);
-}
-
-#endif
-
 SX1272::SX1272() {
-  initSafeWrite();
-
   // Initialize class variables
   _bandwidth       = BW_125;
   _codingRate      = CR_5;
@@ -287,7 +237,7 @@ void SX1272::RxChainCalibration() {
  Function: Sets the module ON.
  Returns: uint8_t setLORA state
 */
-uint8_t SX1272::ON() {
+uint8_t SX1272::ON(char *devpath) {
   uint8_t state = 2;
 
 #if (SX1272_debug_mode > 1)
@@ -295,28 +245,19 @@ uint8_t SX1272::ON() {
   printf("Starting 'ON'\n");
 #endif
 
-  printf("Using module %d\n", MODULE);
+  printf("Using module at dev %s\n", devpath);
 
   // Powering the module
-  pinMode(SX1272_SS, OUTPUT);
-  digitalWriteSafely(SX1272_SS, HIGH);
   delay(100);
 
   // Configure the MISO, MOSI, CS, SPCR.
-  SPI.begin();
+  SPI.begin(devpath);
   // Set Most significant bit first
   SPI.setBitOrder(MSBFIRST);
   // Divide the clock frequency
   SPI.setClockDivider(SPI_CLOCK_DIV64);
   // Set data mode
   SPI.setDataMode(SPI_MODE0);
-  delay(100);
-
-  // added by C. Pham
-  pinMode(SX1272_RST, OUTPUT);
-  digitalWriteSafely(SX1272_RST, HIGH);
-  delay(100);
-  digitalWriteSafely(SX1272_RST, LOW);
   delay(100);
 
   // from single_chan_pkt_fwd by Thomas Telkamp
@@ -328,9 +269,9 @@ uint8_t SX1272::ON() {
     _board = SX1272Chip;
   } else {
     // sx1276?
-    digitalWriteSafely(SX1272_RST, LOW);
+    // digitalWriteSafely(SX1272_RST, LOW);
     delay(100);
-    digitalWriteSafely(SX1272_RST, HIGH);
+    // digitalWriteSafely(SX1272_RST, HIGH);
     delay(100);
     version = readRegister(REG_VERSION);
     if (version == 0x12) {
@@ -514,8 +455,6 @@ void SX1272::OFF() {
 
   SPI.end();
   // Powering the module
-  pinMode(SX1272_SS, OUTPUT);
-  digitalWriteSafely(SX1272_SS, LOW);
 #if (SX1272_debug_mode > 1)
   printf("## Setting OFF ##\n");
   printf("\n");
@@ -529,14 +468,12 @@ void SX1272::OFF() {
    address: address register to read from
 */
 byte SX1272::readRegister(byte address) {
-  digitalWriteSafely(SX1272_SS, LOW);
   bitClear(address, 7); // Bit 7 cleared to write in registers
   // SPI.transfer(address);
   // value = SPI.transfer(0x00);
   txbuf[0] = address;
   txbuf[1] = 0x00;
   maxWrite16();
-  digitalWriteSafely(SX1272_SS, HIGH);
 
 #if (SX1272_debug_mode > 1)
   printf("## Reading:  ##\tRegister ");
@@ -557,15 +494,14 @@ byte SX1272::readRegister(byte address) {
    data : value to write in the register
 */
 void SX1272::writeRegister(byte address, byte data) {
-  digitalWriteSafely(SX1272_SS, LOW);
   delay(1);
   bitSet(address, 7); // Bit 7 set to read from registers
   // SPI.transfer(address);
   // SPI.transfer(data);
   txbuf[0] = address;
   txbuf[1] = data;
-  maxWrite16();
   // digitalWriteSafely(SX1272_SS,HIGH);
+  maxWrite16();
 
 #if (SX1272_debug_mode > 1)
   printf("## Writing:  ##\tRegister ");
@@ -577,18 +513,7 @@ void SX1272::writeRegister(byte address, byte data) {
 #endif
 }
 
-/*
- Function: It gets the temperature from the measurement block module.
- Returns: Integer that determines if there has been any error
-   state = 2  --> The command has not been executed
-   state = 1  --> There has been an error while executing the command
-   state = 0  --> The command has been executed with no errors
-*/
-void SX1272::maxWrite16() {
-  digitalWriteSafely(SX1272_SS, LOW);
-  SPI.transfernb(txbuf, rxbuf, 2);
-  digitalWriteSafely(SX1272_SS, HIGH);
-}
+void SX1272::maxWrite16() { SPI.transfernb(txbuf, rxbuf, 2); }
 
 /*
  Function: Clears the interruption flags
@@ -661,6 +586,7 @@ uint8_t SX1272::setLORA() {
         digitalWriteSafely(SX1272_RST,LOW);
     }
     */
+    // printf("0x%X\r\n", st0);
 
   } while (st0 != LORA_STANDBY_MODE); // LoRa standby mode
 
@@ -3968,7 +3894,7 @@ uint8_t SX1272::receivePacketTimeout(uint16_t wait) {
 }
 #else
 uint8_t SX1272::receivePacketTimeout(uint16_t wait) {
-  uint8_t state   = 2;
+  uint8_t state = 2;
   uint8_t state_f = 2;
 
 #  if (SX1272_debug_mode > 1)
@@ -5388,6 +5314,9 @@ uint8_t SX1272::sendWithTimeout(uint16_t wait) {
     // while ((bitRead(value, 3) == 0) && (millis() - previous < wait))
     while ((bitRead(value, 3) == 0) && (millis() < exitTime)) {
       value = readRegister(REG_IRQ_FLAGS);
+
+      //printf("0x%X\r\n", value);
+      //delay( 100 ); // 10 messages per second is enough
       // Condition to avoid an overflow (DO NOT REMOVE)
       // if( millis() < previous )
       //{

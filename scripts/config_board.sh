@@ -4,21 +4,12 @@ IP=()
 OP0=()
 OP1=()
 
-config-pin 914 gpio ; IP+=(40)
-config-pin 918 spi
-config-pin 919 i2c
-config-pin 920 i2c
-config-pin 921 spi
-config-pin 922 spi_sclk
-# module 0: NSS
-config-pin 926 gpio ; OP1+=(14)
-# module 1: NSS
-config-pin 923 gpio ; OP1+=(49)
+#config-pin 914 gpio ; IP+=(40)
+#config-pin 919 i2c
+#config-pin 920 i2c
 # BTP, BUZZER
-config-pin 817 gpio ; IP+=(27)
-config-pin 818 gpio ; OP0+=(65)
-# module 2: NSS
-config-pin 916 gpio ; OP1+=(51)
+#config-pin 817 gpio ; IP+=(27)
+#config-pin 818 gpio ; OP0+=(65)
 
 # exporting unexported GPIO pins
 for OPN in ${OP1[@]} ${OP0[@]} ${IP[@]}

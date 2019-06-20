@@ -38,14 +38,23 @@
 		"P8.10", "gpio2_4", // led3
 		"P8.09", "gpio2_5", // led4
 
+		// BUZZER:
+		"P8.18", "gpio2_1", // buzzer
+
+		// RTC:
+		"i2c2",  // i2c
+		"P9.19", // SCL
+		"P9.20", // SDA
+
         // SX1276:
-        "spi0", // spi
+        "spi0",  // spi
 		"P9.18", // MOSI
 		"P9.21", // MISO
 		"P9.22", // SCK
-		"P9.26", "gpio0_14", // NSS0
-		"P9.23", "gpio1_17", // NSS1
-		"P9.16", "gpio1_19"; // NSS2
+
+		"P9.26", //?"gpio0_14", // NSS0
+		"P9.23", //?"gpio1_17", // NSS1
+		"P9.16"; //?"gpio1_19"; // NSS2
 
 	/*
 	 * Free up the pins used by the cape from the pinmux helpers.
@@ -65,6 +74,13 @@
 			P8_07_pinmux { status = "disabled"; };
 			P8_10_pinmux { status = "disabled"; };
 			P8_09_pinmux { status = "disabled"; };
+			
+			// BUZZER:
+			P8_18_pinmux { status = "disabled"; };
+
+			// RTC:
+			P9_19_pinmux { status = "disabled"; }; // SCL
+			P9_20_pinmux { status = "disabled"; }; // SDA
 
             // SX1276:
 			P9_26_pinmux { status = "disabled"; }; // NSS0
@@ -73,7 +89,7 @@
 
 			P9_18_pinmux { status = "disabled"; }; // MOSI
 			P9_21_pinmux { status = "disabled"; }; // MISO
-			P9_22_pinmux { status = "disabled"; }; // SCK
+			P9_22_pinmux { status = "disabled"; }; // SCLK
 		};
 	};
 
@@ -88,9 +104,7 @@
 					BONE_P8_10 (PIN_OUTPUT | MUX_MODE7)
 					BONE_P8_09 (PIN_OUTPUT | MUX_MODE7)
 
-                    BONE_P9_26 (PIN_OUTPUT | MUX_MODE7)
-					BONE_P9_23 (PIN_OUTPUT | MUX_MODE7)
-					BONE_P9_16 (PIN_OUTPUT | MUX_MODE7)
+					BONE_P8_18 (PIN_OUTPUT | MUX_MODE7)
 				>;
 			};
 
@@ -111,7 +125,18 @@
                 pinctrl-single,pins = <
                     BONE_P9_18 (PIN_OUTPUT_PULLUP | MUX_MODE0)     // MOSI
                     BONE_P9_21 (PIN_INPUT_PULLUP  | MUX_MODE0)     // MISO
-                    BONE_P9_22 (PIN_OUTPUT_PULLUP | MUX_MODE0)     // SCK
+                    BONE_P9_22 (PIN_INPUT_PULLUP  | MUX_MODE0)     // SCLK
+
+                    BONE_P9_26 (PIN_OUTPUT_PULLUP | MUX_MODE7)  // NSS0
+					BONE_P9_23 (PIN_OUTPUT_PULLUP | MUX_MODE7)  // NSS1
+					BONE_P9_16 (PIN_OUTPUT_PULLUP | MUX_MODE7)  // NSS2
+                >;
+            };
+
+            ds1307_pins: pinmux_ds1307_pins {
+                pinctrl-single,pins = <
+                    BONE_P9_19 (PIN_INPUT_PULLUP | MUX_MODE3)     // SCL
+                    BONE_P9_20 (PIN_INPUT_PULLUP | MUX_MODE3)     // SCK
                 >;
             };
 		};
@@ -143,22 +168,56 @@
     fragment@4 {
         target = <&spi0>;
         __overlay__ {
-             #address-cells = <1>;
-             #size-cells = <0>;
-            
-             status = "okay";
-             pinctrl-names = "default";
-             pinctrl-0 = <&sx1276_pins>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			
+			cs-gpios = <&gpio0 14 0>, <&gpio1 17 0>, <&gpio1 19 0>;
 
-             spidev@0 {
-                 spi-max-frequency = <24000000>;
-                 reg = <0>;
-                 compatible = "linux,spidev";
+			status = "okay";
+			pinctrl-names = "default";
+			pinctrl-0 = <&sx1276_pins>;
+
+			spidev@0 {
+				spi-max-frequency = <24000000>;
+				reg = <0>;
+				compatible = "linux,spidev";
+            };
+
+			spidev@1 {
+				spi-max-frequency = <24000000>;
+				reg = <1>;
+				compatible = "linux,spidev";
+            };
+
+			spidev@2 {
+				spi-max-frequency = <24000000>;
+				reg = <2>;
+				compatible = "linux,spidev";
             };
         };
     };
 
 	fragment@5 {
+		target = <&i2c2>;
+
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			status = "okay";
+            pinctrl-names = "default";
+			pinctrl-0 = <&ds1307_pins>;
+
+			clock-frequency = <100000>;
+
+			rtc@68 {
+				reg = <0x68>;
+				compatible = "dallas,ds1307";
+			};
+		};
+	};
+
+	fragment@6 {
 		target = <&ocp>;
 		__overlay__ {
 			led_pins_helper {
@@ -191,24 +250,13 @@
 					default-state = "off";
 				};
 
-				module0 {
-					label = "_module0";
-					gpios = <&gpio0 14 1>; /* flag 1 means active low */
+				sound {
+					label = "sound";
+					gpios = <&gpio2 1 0>; /* flag 1 means active low */
 					linux,default-trigger = "none";
 					default-state = "off";
 				};
-				module1 {
-					label = "_module1";
-					gpios = <&gpio1 17 1>; /* flag 1 means active low */
-					linux,default-trigger = "none";
-					default-state = "off";
-				};
-				module2 {
-					label = "_module2";
-					gpios = <&gpio1 19 1>; /* flag 1 means active low */
-					linux,default-trigger = "none";
-					default-state = "off";
-				};
+
 			};
 			
 		};
