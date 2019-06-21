@@ -3,7 +3,7 @@ Description=Start WiFi AP Service
 After=mqttclient.service
 
 [Service] 
-ExecStart=/home/pi/lora_gateway_triple/wifiAPstart.sh
+ExecStart=/home/pi/lora_gateway/wifiAPstart.sh
 SyslogIdentifier=WiFiAP 
 Restart=on-failure 
 RemainAfterExit=yes
