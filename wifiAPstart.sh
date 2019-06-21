@@ -1,4 +1,7 @@
-sudo rfkill unblock wifi
+#!/bin/bash
+
+/usr/sbin/rfkill unblock wifi
 systemctl stop dnsmasq
-sudo killall -9 wpa_supplicant
-create_ap --no-virt wlan0 eth0 testAP testtest &
+/bin/ip link set wlan0 up
+/usr/bin/killall -9 wpa_supplicant
+/usr/bin/create_ap --no-virt wlan0 eth0 iglaWifi iglaigla

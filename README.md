@@ -132,6 +132,11 @@ Java installation
 
 WiFi настройка режима точки доступа
 --------------------------------------------------
+	Скопировать файл wifiAP.service в /etc/systemd/system
+	
+	Выполнить: sudo systemctl enable wifiAP
+
+	sudo systemctl disable connmanctl
 
 	sudo systemctl disable hostapd
 
@@ -149,15 +154,11 @@ WiFi настройка режима точки доступа
 	
 	make install
 	
-	sudo nano /etc/create_ap.conf
-	
-		- поменяйте SSID и Passphrase на желаемые
- 	
-	sudo systemctl enable create_ap
-	
 	для проверки создания точки доступа команда: sudo create_ap --no-virt wlan0 eth0 testAP testtest
 	
 	для остановки других сервисов WiFi (если есть): sudo killall -9 wpa_supplicant
+	
+	настройки сервиса в файле: wifiAPstart.sh
 
 WiFi настройка простого клиента (не нужно для production)
 --------------------------------------------------
