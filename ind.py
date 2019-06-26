@@ -1,0 +1,1 @@
+/home/pi/igla-gui/ind.py
