@@ -306,7 +306,7 @@ MQTTClientLoRa установка и настройка
 
 		make sure every line there has # in the front, then add new line with text:
 		
-		/home/pi/igla-gui/igla_gui.py
+		/home/pi/igla-gui/gui.py
 		
 	download Igla GUI git repository to /home/pi: 
 	https://github.com/Renha/igla-gui 
