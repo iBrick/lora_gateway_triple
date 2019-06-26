@@ -2,10 +2,11 @@
 
 import time
 import sys
-from ind import indicators
 import os
 
-os.chdir('/home/pi/igla-gui/')
+# os.chdir('/home/pi/igla-gui/')
+
+from ind import indicators
 
 
 if len(sys.argv) < 2:
