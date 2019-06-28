@@ -171,7 +171,7 @@ def main(ldata, pdata, rdata, tdata, gwid):
     SNR = arr[5]
     RSSI = arr[6]
     print("RNH: we got pkg for MQTT")
-    os.system("/home/pi/lora_gateway/blink.py radio")
+    subprocess.Popen([sys.executable, '/home/pi/lora_gateway/blink.py', 'radio'])
 
     # LoRaWAN packet
     if dst == 256:
