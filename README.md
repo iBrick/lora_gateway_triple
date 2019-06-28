@@ -627,6 +627,25 @@ ACK устройству-отправителю шлётся автоматич�
 - флаг тревоги уровня заряда батареи и уровень напряжения на батарее.
 
 
+Оптимизации микрокомпьютера для ускорения работы
+-----------------------
+
+1. Remove  initrd in /boot
+
+2. sudo systemctl disable bluetooth
+
+sudo systemctl disable wifi-reset.service 
+
+sudo systemctl disable bb-wl18xx-bluetooth.service
+
+sudo systemctl disable robotcontrol.service
+
+3. Выключить режим флешки для USB:
+
+sudo nano /etc/default/bb-boot
+
+ USB_IMAGE_FILE_DISABLED=yes
+
 
 Readme for triple gateway (rus, old)
 ====================================
