@@ -99,7 +99,7 @@ void startConfig(int channel, int mode, int addr, int dbm) {
   }
 
   sx1272._nodeAddress = addr;
-  sx1272._rawFormat   = true;
+  // sx1272._rawFormat   = true;
 }
 
 void setup(char *devpath, int channel, int mode, int addr, int dbm) {
@@ -130,7 +130,7 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
     e = 1;
 
     if (status_counter == 60 || status_counter == 0) {
-      printf("%s", "^$Low-level gw status ON");
+      printf("%s", "^$Low-level gw status ON\r\n");
       status_counter = 0;
     }
 
