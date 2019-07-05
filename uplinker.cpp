@@ -14,7 +14,6 @@
 #include <unistd.h>
 
 #define STARTING_CHANNEL 4
-
 uint32_t loraChannelArray[] = {CH_04_868, CH_05_868, CH_06_868, CH_07_868,
                                CH_08_868, CH_09_868, CH_10_868, CH_11_868,
                                CH_12_868, CH_13_868, CH_14_868, CH_15_868,
@@ -96,7 +95,7 @@ void startConfig(int channel, int mode, int addr, int dbm) {
   if (sx1272._preamblelength != 8) {
     sx1272.setPreambleLength(8);
     e = sx1272.getPreambleLength();
-  }
+  } // TODO: different preamble length
 
   sx1272._nodeAddress = addr;
   // sx1272._rawFormat   = true;
@@ -195,14 +194,21 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
 
       tm_info = localtime(&tv.tv_sec);
 
-      tmp_length = sx1272._payloadlength;
+      uint8_t offset = 0;
+      if (sx1272._rawFormat) {
+        sx1272.packet_received.dst     = sx1272.packet_received.data[offset++];
+        sx1272.packet_received.type    = sx1272.packet_received.data[offset++];
+        sx1272.packet_received.src     = sx1272.packet_received.data[offset++];
+        sx1272.packet_received.packnum = sx1272.packet_received.data[offset++];
+      }
+      tmp_length = sx1272._payloadlength - offset;
 
       sx1272.getSNR();
       sx1272.getRSSIpacket();
 
       // Renha: in base64
       int b64_length = tmp_length;
-      if (sx1272.packet_received.data[0] == 0xff)
+      if (sx1272.packet_received.data[offset] == 0xff)
         b64_length = base64_enc_len(sx1272._payloadlength - 1) + 2;
 
       printf("--- rxlora. dst=%d type=0x%.2X src=%d seq=%d",
@@ -239,13 +245,15 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
       // print to stdout the content of the packet
       // Renha: in base64
       // two first bytes are generated, not from encoding
-      if (sx1272.packet_received.data[0] == 0xff) {
+
+      if (sx1272.packet_received.data[offset] == 0xff) {
         char base64buf[1024];
         cmd[b++] = '\\';
         cmd[b++] = '!';
         printf("%s", "\\!");
         int base64len = base64_enc_len(tmp_length - a - 1);
-        base64_encode(base64buf, (char *)(sx1272.packet_received.data + a + 1),
+        base64_encode(base64buf,
+                      (char *)(sx1272.packet_received.data + offset + a + 1),
                       tmp_length - a - 1);
         base64buf[base64len] = 0x00;
         printf("%s\r\n", base64buf);
@@ -254,10 +262,10 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
         }
       } else {
         for (; a < tmp_length; a++, b++) {
-          printf("%c", (char)sx1272.packet_received.data[a]);
+          printf("%c", (char)sx1272.packet_received.data[offset + a]);
 
           if (b < MAX_CMD_LENGTH)
-            cmd[b] = (char)sx1272.packet_received.data[a];
+            cmd[b] = (char)sx1272.packet_received.data[offset + a];
         }
       }
       // strlen(cmd) will be correct as only the payload is copied
