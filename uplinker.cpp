@@ -98,7 +98,7 @@ void startConfig(int channel, int mode, int addr, int dbm) {
   } // TODO: different preamble length
 
   sx1272._nodeAddress = addr;
-  // sx1272._rawFormat   = true;
+  sx1272._rawFormat   = true;
 }
 
 void setup(char *devpath, int channel, int mode, int addr, int dbm) {
