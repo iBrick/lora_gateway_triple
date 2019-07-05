@@ -252,8 +252,9 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
 
       printf("%s", "\\!");
       char base64buf[1024];
+      int base64len;
       if (lorawan) {
-        int base64len = base64_enc_len(tmp_length + 1);
+        base64len = base64_enc_len(tmp_length + 1);
         char add_marker_buf[1024];
         for (uint16_t i = 0; i < tmp_length; i++)
           add_marker_buf[i + 1] = sx1272.packet_received.data[i];
@@ -261,7 +262,7 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
         base64_encode(base64buf, (char *)(add_marker_buf + offset),
                       tmp_length + 1);
       } else {
-        int base64len = base64_enc_len(tmp_length - 1);
+        base64len = base64_enc_len(tmp_length - 1);
         base64_encode(base64buf,
                       (char *)(sx1272.packet_received.data + offset + 1),
                       tmp_length - 1);
