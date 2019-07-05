@@ -279,6 +279,9 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
       }
       // strlen(cmd) will be correct as only the payload is copied
       cmd[b] = '\0';
+
+      printf("^$packet length is %d bytes\r\n", sx1272._payloadlength);
+
       fflush(stdout);
     }
   }
