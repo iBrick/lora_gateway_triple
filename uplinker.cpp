@@ -195,11 +195,19 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
       tm_info = localtime(&tv.tv_sec);
 
       uint8_t offset = 0;
-      if (sx1272._rawFormat) {
+      if (sx1272._rawFormat && sx1272.packet_received.data[0] == 1 &&
+          // sx1272.packet_received.data[1] == 0xff &&
+          sx1272.packet_received.data[2] == 255 &&
+          sx1272.packet_received.data[4] == 0xff) {
         sx1272.packet_received.dst     = sx1272.packet_received.data[offset++];
         sx1272.packet_received.type    = sx1272.packet_received.data[offset++];
         sx1272.packet_received.src     = sx1272.packet_received.data[offset++];
         sx1272.packet_received.packnum = sx1272.packet_received.data[offset++];
+      } else {
+        sx1272.packet_received.dst = 1;
+        // sx1272.packet_received.type    = ;
+        sx1272.packet_received.src = 255;
+        // sx1272.packet_received.packnum = 0;
       }
       tmp_length = sx1272._payloadlength - offset;
 
@@ -267,6 +275,7 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
           if (b < MAX_CMD_LENGTH)
             cmd[b] = (char)sx1272.packet_received.data[offset + a];
         }
+        printf('\r\n');
       }
       // strlen(cmd) will be correct as only the payload is copied
       cmd[b] = '\0';
