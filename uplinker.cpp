@@ -38,7 +38,7 @@ uint16_t optBW = 0;
 uint8_t optSF  = 0;
 uint8_t optCR  = 0;
 double optFQ   = -1.0;
-uint8_t optSW  = 0x12;
+uint8_t optSW  = 0x34; // 0x12;
 
 void startConfig(int channel, int mode, int addr, int dbm) {
 
@@ -105,9 +105,8 @@ void setup(char *devpath, int channel, int mode, int addr, int dbm) {
 
   e = sx1272.ON(devpath);
   e = sx1272.getSyncWord();
-  if (optSW != 0x12) {
+  if (optSW != 0x12)
     e = sx1272.setSyncWord(optSW);
-  }
 
   if (!e) {
     radioON = true;
