@@ -183,9 +183,16 @@ WiFi настройка простого клиента (не нужно для 
 
 GPS - приёмник
 --------------
+	sudo apt-get install gpsd gpsd-clients
+Для проверки работоспособности выполните: sudo gpsd /dev/ttyS4 -F /var/run/gpsd.sock   (данные появляются не сразу, надо немного подождать)
+	
+	sudo systemctl enable gpsd.socket
 Необходимо выполнить настройку сервиса, в файле `/etc/default/gpsd` указав:
 
+	START_DAEMON="true"
+	USBAUTO="true"
 	DEVICES="/dev/ttyS4"
+	GPSD_OPTIONS="-b -n"
 
 Светодиоды индикации и звуковой сигнал
 --------------------------------------
