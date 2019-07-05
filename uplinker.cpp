@@ -189,20 +189,25 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
 
       tm_info = localtime(&tv.tv_sec);
 
-      uint8_t offset = 0;
-      if (sx1272._rawFormat && sx1272.packet_received.data[0] == 1 &&
-          // sx1272.packet_received.data[1] == 0xff &&
-          sx1272.packet_received.data[2] == 255 &&
-          sx1272.packet_received.data[4] == 0xff) {
-        sx1272.packet_received.dst     = sx1272.packet_received.data[offset++];
-        sx1272.packet_received.type    = sx1272.packet_received.data[offset++];
-        sx1272.packet_received.src     = sx1272.packet_received.data[offset++];
-        sx1272.packet_received.packnum = sx1272.packet_received.data[offset++];
-      } else {
-        sx1272.packet_received.dst = 1;
-        // sx1272.packet_received.type    = ;
-        sx1272.packet_received.src = 255;
-        // sx1272.packet_received.packnum = 0;
+      uint8_t lorawan = 0;
+      uint8_t offset  = 0;
+      if (sx1272._rawFormat) {
+        if (sx1272.packet_received.data[0] == 1 &&
+            // sx1272.packet_received.data[1] == 0xff &&
+            sx1272.packet_received.data[2] == 255 &&
+            sx1272.packet_received.data[4] == 0xff) {
+          sx1272.packet_received.dst  = sx1272.packet_received.data[offset++];
+          sx1272.packet_received.type = sx1272.packet_received.data[offset++];
+          sx1272.packet_received.src  = sx1272.packet_received.data[offset++];
+          sx1272.packet_received.packnum =
+              sx1272.packet_received.data[offset++];
+        } else {
+          lorawan                    = 1;
+          sx1272.packet_received.dst = 1;
+          // sx1272.packet_received.type    = ;
+          sx1272.packet_received.src = 255;
+          // sx1272.packet_received.packnum = 0;
+        }
       }
       tmp_length = sx1272._payloadlength - offset;
 
@@ -245,25 +250,31 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
       printf("%c%c", (char)DATA_PREFIX_0, (char)DATA_PREFIX_1);
 #endif
 
-      // Renha: in base64
-      // two first bytes are generated, not from encoding
-
-      if (sx1272.packet_received.data[offset] == 0xff) {
-        char base64buf[1024];
-        printf("%s", "\\!");
+      printf("%s", "\\!");
+      char base64buf[1024];
+      if (lorawan) {
+        int base64len = base64_enc_len(tmp_length + 1);
+        char add_marker_buf[1024];
+        for (uint16_t i = 0; i < tmp_length; i++)
+          add_marker_buf[i + 1] = sx1272.packet_received.data[i];
+        add_marker_buf[0] = 255;
+        base64_encode(base64buf, (char *)(add_marker_buf + offset),
+                      tmp_length + 1);
+      } else {
         int base64len = base64_enc_len(tmp_length - 1);
         base64_encode(base64buf,
                       (char *)(sx1272.packet_received.data + offset + 1),
                       tmp_length - 1);
-        base64buf[base64len] = 0x00;
-        printf("%s\r\n", base64buf);
-      } else {
+      }
+      base64buf[base64len] = 0x00;
+      printf("%s\r\n", base64buf);
+      /*if (0) {
         for (uint8_t a = 0; a < tmp_length; a++) {
           printf("%02x",
                  (unsigned char)sx1272.packet_received.data[offset + a]);
         }
         printf("\r\n");
-      }
+      }*/
 
       printf("^$packet length is %d bytes\r\n", sx1272._payloadlength);
 
