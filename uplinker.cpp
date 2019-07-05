@@ -85,7 +85,6 @@ void startConfig(int channel, int mode, int addr, int dbm) {
     }
   }
   printf("%d\r\n", e);
-  PRINTLN;
 
 #ifdef PABOOST
   sx1272._needPABOOST = true;
@@ -140,20 +139,14 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
 
     status_counter++;
     if (e != 0 && e != 3) {
-      PRINT_CSTSTR("%s", "^$Receive error ");
-      PRINT_VALUE("%d", e);
-      PRINTLN;
-
+      printf("^$Receive error %d\r\n", e);
       if (e == 2) {
         // Power OFF the module
         sx1272.OFF();
         radioON = false;
-        PRINT_CSTSTR("%s", "^$Resetting radio module");
-        PRINTLN;
+        printf("%s\r\n", "^$Resetting radio module");
         e = sx1272.ON(devpath);
-        PRINT_CSTSTR("%s", "^$Setting power ON: state ");
-        PRINT_VALUE("%d", e);
-        PRINTLN;
+        printf("^$Setting power ON: state %d\r\n", e);
 
         if (!e) {
           radioON = true;
@@ -264,8 +257,6 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
       }
       // strlen(cmd) will be correct as only the payload is copied
       cmd[b] = '\0';
-      PRINTLN;
-      FLUSHOUTPUT;
     }
   }
 }
