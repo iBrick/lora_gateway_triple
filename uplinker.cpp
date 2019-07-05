@@ -25,8 +25,6 @@ uint32_t loraChannelArray[] = {CH_04_868, CH_05_868, CH_06_868, CH_07_868,
 #  define DATA_PREFIX_0 0xFF
 #  define DATA_PREFIX_1 0xFE
 #endif
-#define MAX_CMD_LENGTH 255
-char cmd[MAX_CMD_LENGTH];
 
 boolean receivedFromLoRa = false;
 boolean withAck          = false;
@@ -119,13 +117,11 @@ void setup(char *devpath, int channel, int mode, int addr, int dbm) {
 }
 
 void loop(char *devpath, int channel, int mode, int addr, int dbm) {
-  int i = 0, e;
-  int cmdValue;
+  int e;
 
   receivedFromLoRa = false;
 
   if (radioON) {
-
     e = 1;
 
     if (status_counter == 60 || status_counter == 0) {
@@ -173,7 +169,6 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
     if (!e) {
       // printf("Not e is already success!\r\n");
 
-      int a = 0, b = 0;
       uint8_t tmp_length;
 
       receivedFromLoRa = true;
@@ -250,36 +245,25 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
       printf("%c%c", (char)DATA_PREFIX_0, (char)DATA_PREFIX_1);
 #endif
 
-      // print to stdout the content of the packet
       // Renha: in base64
       // two first bytes are generated, not from encoding
 
       if (sx1272.packet_received.data[offset] == 0xff) {
         char base64buf[1024];
-        cmd[b++] = '\\';
-        cmd[b++] = '!';
         printf("%s", "\\!");
-        int base64len = base64_enc_len(tmp_length - a - 1);
+        int base64len = base64_enc_len(tmp_length - 1);
         base64_encode(base64buf,
-                      (char *)(sx1272.packet_received.data + offset + a + 1),
-                      tmp_length - a - 1);
+                      (char *)(sx1272.packet_received.data + offset + 1),
+                      tmp_length - 1);
         base64buf[base64len] = 0x00;
         printf("%s\r\n", base64buf);
-        for (int i = 0; i < base64len && b < MAX_CMD_LENGTH; i++, b++) {
-          cmd[b] = base64buf[i];
-        }
       } else {
-        for (; a < tmp_length; a++, b++) {
-          // printf("%c", (char)sx1272.packet_received.data[offset + a]);
+        for (uint8_t a = 0; a < tmp_length; a++) {
           printf("%02x",
                  (unsigned char)sx1272.packet_received.data[offset + a]);
-          if (b < MAX_CMD_LENGTH)
-            cmd[b] = (char)sx1272.packet_received.data[offset + a];
         }
         printf("\r\n");
       }
-      // strlen(cmd) will be correct as only the payload is copied
-      cmd[b] = '\0';
 
       printf("^$packet length is %d bytes\r\n", sx1272._payloadlength);
 
