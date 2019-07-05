@@ -2,7 +2,7 @@ include radio.makefile
 
 debug = $(-DSX1272_debug_mode=2)
 
-lora_gateway_full: uplinker downlinker
+lora_gateway_full: uplinker downlinker uplinker_light
 
 downlinker: downlinker.o arduPi_bb.o SX1272_bb.o SPI.o GPIO.o Base64.o
 	g++ $(debug) -lrt -lpthread SPI.o GPIO.o downlinker.o Base64.o arduPi_bb.o SX1272_bb.o -o downlinker
@@ -21,6 +21,12 @@ Base64.o: Base64.h Base64.cpp
 
 uplinker: lora_gateway.o Base64.o arduPi_bb.o SX1272_bb.o SPI.o GPIO.o
 	g++ $(debug) -lrt -lpthread SPI.o GPIO.o lora_gateway.o Base64.o arduPi_bb.o SX1272_bb.o -o uplinker	
+
+uplinker_light: uplinker.o arduPi_bb.o SX1272_bb.o SPI.o GPIO.o Base64.o
+	g++ $(debug) -lrt -lpthread SPI.o GPIO.o uplinker.o Base64.o arduPi_bb.o SX1272_bb.o -o uplinker_light
+
+uplinker.o: uplinker.cpp radio.makefile gateway_conf.json
+	g++ $(CFLAGS) $(debug) -DRASPBERRY -DBEAGLEBONE -DIS_RCV_GATEWAY -c uplinker.cpp -o uplinker.o
 
 lora_gateway.o: lora_gateway.cpp radio.makefile gateway_conf.json
 	g++ $(CFLAGS) $(debug) -DRASPBERRY -DBEAGLEBONE -DIS_RCV_GATEWAY -c lora_gateway.cpp -o lora_gateway.o

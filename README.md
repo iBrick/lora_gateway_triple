@@ -183,9 +183,16 @@ WiFi настройка простого клиента (не нужно для 
 
 GPS - приёмник
 --------------
+	sudo apt-get install gpsd gpsd-clients
+Для проверки работоспособности выполните: sudo gpsd /dev/ttyS4 -F /var/run/gpsd.sock   (данные появляются не сразу, надо немного подождать)
+	
+	sudo systemctl enable gpsd.socket
 Необходимо выполнить настройку сервиса, в файле `/etc/default/gpsd` указав:
 
+	START_DAEMON="true"
+	USBAUTO="true"
 	DEVICES="/dev/ttyS4"
+	GPSD_OPTIONS="-b -n"
 
 Светодиоды индикации и звуковой сигнал
 --------------------------------------
@@ -684,18 +691,18 @@ ANNEX.A: LoRa mode and predefined channels
 
 Pre-defined LoRa modes (from initial Libelium `SX1272.h`)
 
-| mode | BW | SF |
-|------|----|----|
-| 1    | 125| 12 |
-| 2    | 250| 12 |
-| 3    | 125| 10 |
-| 4    | 500| 12 |
-| 5    | 250| 10 |
-| 6    | 500| 11 |
-| 7    | 250|  9 |
-| 8    | 500|  9 |
-| 9    | 500|  8 |
-| 10   | 500|  7 |
+| mode | BW | SF | DR |
+|------|----|----|----|
+| 1    | 125| 12 | 0 |
+| 2    | 250| 12 | 0 |
+| 3    | 125| 10 | 2 |
+| 4    | 500| 12 | 0 |
+| 5    | 250| 10 | 2 |
+| 6    | 500| 11 | 1 |
+| 7    | 250|  9 | 3 |
+| 8    | 500|  9 | 3 |
+| 9    | 500|  8 | 4 |
+| 10   | 500|  7 | 5 |
 
 Pre-defined channels in 868MHz, 915MHz and 433MHz band (most of them from initial Libelium `SX1272.h`, except those marked with `*`). Frequencies in bold are those used by default in each band.
 
