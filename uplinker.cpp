@@ -275,7 +275,7 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
           if (b < MAX_CMD_LENGTH)
             cmd[b] = (char)sx1272.packet_received.data[offset + a];
         }
-        printf('\r\n');
+        printf("\r\n");
       }
       // strlen(cmd) will be correct as only the payload is copied
       cmd[b] = '\0';
