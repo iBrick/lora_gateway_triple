@@ -270,8 +270,9 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
         }
       } else {
         for (; a < tmp_length; a++, b++) {
-          printf("%c", (char)sx1272.packet_received.data[offset + a]);
-
+          // printf("%c", (char)sx1272.packet_received.data[offset + a]);
+          printf("%02x",
+                 (unsigned char)sx1272.packet_received.data[offset + a]);
           if (b < MAX_CMD_LENGTH)
             cmd[b] = (char)sx1272.packet_received.data[offset + a];
         }
