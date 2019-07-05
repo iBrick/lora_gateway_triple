@@ -221,7 +221,7 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
              b64_length, // tmp_length,
              sx1272._SNR, sx1272._RSSIpacket);
 
-      sprint("^r%d,%d,%d\n",
+      printf("^r%d,%d,%d\n",
              (sx1272._bandwidth == BW_125)
                  ? 125
                  : ((sx1272._bandwidth == BW_250) ? 250 : 500),
