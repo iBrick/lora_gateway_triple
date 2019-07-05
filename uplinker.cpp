@@ -173,6 +173,8 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
 
     if (!e) {
 
+      printf("Not e is already success!\r\n");
+
       int a = 0, b = 0;
       uint8_t tmp_length;
 
