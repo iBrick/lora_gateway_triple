@@ -14,18 +14,9 @@ else:
     if len(sys.argv) > 2:
         appskey = list(bytearray.fromhex(sys.argv[2]))
 
-<<<<<<< HEAD
-    if len(sys.argv) > 3:
-        nwskey = list(bytearray.fromhex(sys.argv[3]))
+        if len(sys.argv) > 3:
+            nwkskey = list(bytearray.fromhex(sys.argv[3]))
 
-    lorawan = LoRaWAN.new(nwskey, appskey)
+    lorawan = LoRaWAN.new(nwkskey, appskey)
     lorawan.read(payload)
     print(''.join('{:02X}'.format(i) for i in lorawan.get_payload()))
-=======
-	if len(sys.argv) > 3:
-		nwkskey = list( bytearray.fromhex( sys.argv[ 3 ] ) )
-
-	lorawan = LoRaWAN.new(nwkskey, appskey)
-	lorawan.read(payload)
-	print( ''.join('{:02X}'.format(i) for i in lorawan.get_payload()))
->>>>>>> 7cb201b48ce87cd4c01b34044b2741c9a35760ab
