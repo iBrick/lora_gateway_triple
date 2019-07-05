@@ -172,8 +172,7 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
 #endif
 
     if (!e) {
-
-      printf("Not e is already success!\r\n");
+      // printf("Not e is already success!\r\n");
 
       int a = 0, b = 0;
       uint8_t tmp_length;
@@ -249,7 +248,7 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
         base64_encode(base64buf, (char *)(sx1272.packet_received.data + a + 1),
                       tmp_length - a - 1);
         base64buf[base64len] = 0x00;
-        printf("%s", base64buf);
+        printf("%s\r\n", base64buf);
         for (int i = 0; i < base64len && b < MAX_CMD_LENGTH; i++, b++) {
           cmd[b] = base64buf[i];
         }
@@ -263,7 +262,7 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
       }
       // strlen(cmd) will be correct as only the payload is copied
       cmd[b] = '\0';
-      printf(cmd);
+      fflush(stdout);
     }
   }
 }
