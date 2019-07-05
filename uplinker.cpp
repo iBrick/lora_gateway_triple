@@ -27,6 +27,7 @@ uint32_t loraChannelArray[] = {CH_04_868, CH_05_868, CH_06_868, CH_07_868,
 #  define DATA_PREFIX_1 0xFE
 #endif
 #define MAX_CMD_LENGTH 255
+char cmd[MAX_CMD_LENGTH];
 
 boolean receivedFromLoRa = false;
 boolean withAck          = false;
@@ -227,6 +228,9 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
                  : ((sx1272._bandwidth == BW_250) ? 250 : 500),
              sx1272._codingRate + 4, sx1272._spreadingFactor);
 
+      strftime(time_buffer, 30, "%Y-%m-%dT%H:%M:%S", tm_info);
+      printf("^t%s.%03d\n", time_buffer, millisec);
+
 #if defined WITH_DATA_PREFIX
       printf("%c%c", (char)DATA_PREFIX_0, (char)DATA_PREFIX_1);
 #endif
@@ -257,6 +261,7 @@ void loop(char *devpath, int channel, int mode, int addr, int dbm) {
       }
       // strlen(cmd) will be correct as only the payload is copied
       cmd[b] = '\0';
+      printf(cmd);
     }
   }
 }
