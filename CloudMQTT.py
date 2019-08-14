@@ -200,7 +200,7 @@ def main(ldata, pdata, rdata, tdata, gwid):
                 print('keys are: ' + str(key_MQTT.appskey) + ', ' +
                       str(key_MQTT.nwkskey))
                 data = subprocess.Popen(
-                    [sys.executable, '/home/pi/lora_gateway/decipher.py', data, key_MQTT.appskey, key_MQTT.nwkskey]).stdout.read().strip()
+                    ['python3', '/home/pi/lora_gateway/decipher.py', data, key_MQTT.appskey, key_MQTT.nwkskey]).stdout.read().strip()
                 print('data now: ' + data)
                 ldata = base64.b64encode(bytearray.fromhex('ff'+data))
 
