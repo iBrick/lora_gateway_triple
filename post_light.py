@@ -22,6 +22,19 @@ import base64
 import requests
 
 
+HEADER_SIZE = 4
+APPKEY_SIZE = 4
+PKT_TYPE_DATA = 0x10
+PKT_TYPE_ACK = 0x20
+
+PKT_FLAG_ACK_REQ = 0x08
+PKT_FLAG_DATA_ENCRYPTED = 0x04
+PKT_FLAG_DATA_WAPPKEY = 0x02
+PKT_FLAG_DATA_DOWNLINK = 0x01
+
+LORAWAN_HEADER_SIZE = 13
+
+
 def getSingleChar():
     return sys.stdin.read(1)
 
