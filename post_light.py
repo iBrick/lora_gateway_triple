@@ -22,26 +22,8 @@ import base64
 import requests
 
 
-_linebuf = "the line buffer"
-_linebuf_idx = 0
-_has_linebuf = 0
-
-
 def getSingleChar():
-    global _has_linebuf
-    # if we have a valid _linebuf then read from _linebuf
-    if _has_linebuf == 1:
-        global _linebuf_idx
-        global _linebuf
-        if _linebuf_idx < len(_linebuf):
-            _linebuf_idx = _linebuf_idx + 1
-            return _linebuf[_linebuf_idx-1]
-        else:
-            # no more character from _linebuf, so read from stdin
-            _has_linebuf = 0
-            return sys.stdin.read(1)
-    else:
-        return sys.stdin.read(1)
+    return sys.stdin.read(1)
 
 
 def getAllLine():
