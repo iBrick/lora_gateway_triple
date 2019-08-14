@@ -16,6 +16,7 @@ else:
 
         if len(sys.argv) > 3:
             nwkskey = list(bytearray.fromhex(sys.argv[3]))
+    #print('data, appskey, nwkskey: {} {} {}'.format(payload, appskey, nwkskey))
 
     lorawan = LoRaWAN.new(nwkskey, appskey)
     lorawan.read(payload)
