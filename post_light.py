@@ -22,6 +22,11 @@ import base64
 import requests
 
 
+_linebuf = "the line buffer"
+_linebuf_idx = 0
+_has_linebuf = 0
+
+
 def getSingleChar():
     global _has_linebuf
     # if we have a valid _linebuf then read from _linebuf
