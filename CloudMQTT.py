@@ -211,7 +211,7 @@ def main(ldata, pdata, rdata, tdata, gwid):
 
                 topic = 'lorawan'
 
-            MQTT_uploadData('', ['', 'uplink', ldata],
+            MQTT_uploadData('', ['', topic, ldata],
                             str(SNR) + ',' + str(RSSI), tdata)
 
         # LoRaWAN (so encrypted packet)
