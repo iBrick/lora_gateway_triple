@@ -201,7 +201,8 @@ def main(ldata, pdata, rdata, tdata, gwid):
                       str(key_MQTT.nwkskey))
                 p = subprocess.Popen(
                     ['python3', '/home/pi/lora_gateway/decipher.py', data, key_MQTT.appskey, key_MQTT.nwkskey])
-                data = p.stdout.readline().strip()
+                out, err = p.communicate()
+                data = out.strip()
                 print('data now: ' + data)
                 ldata = base64.b64encode(bytearray.fromhex('ff'+data))
 
