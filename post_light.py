@@ -107,7 +107,7 @@ while True:
                         print "Error when uploading data to the cloud"
 
             print "--> cloud end"
-речной вокзал, тц речной, студия маникюра 2 этаж, час два три
+
         else:
             print "unrecognized data logging prefix: discard data"
             getAllLine()
