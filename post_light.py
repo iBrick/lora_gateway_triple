@@ -145,57 +145,6 @@ while True:
             print info_str
             # TODO: maintain statistics from received messages and periodically add these informations in the gateway.log file
 
-            # here we check for pending downlink message that need to be sent back to the end-device
-            #
-            for downlink_request in pending_downlink_requests:
-                request_json = json.loads(downlink_request)
-                if (request_json["dst"] == 0) or (src == request_json["dst"]):
-                    print "post downlink: receive from %d with pending request" % src
-                    if (request_json["dst"] == 0):
-                        print "in broadcast mode"
-                    else:
-                        print "in unicast mode"
-                    print "post downlink: downlink data is \"%s\"" % request_json["data"]
-                    print "post downlink: generate "+_gw_downlink_file+" from entry"
-                    print downlink_request.replace('\n', '')
-
-                    # generate the MIC corresponding to the clear data and the destination device address
-                    # it is possible to have a broadcast address but since the only device that is listening
-                    # is the one that has sent a packet, there is little interest in doing so
-                    # so currently, we use the sending device's address to compute the MIC
-                    # Renha: was MIC=loraWAN_get_MIC(src,request_json["data"])
-                    MIC = [0, 0, 0, 0]
-                    # add the 4 byte MIC information into the json line
-                    request_json['MIC0'] = hex(MIC[0])
-                    request_json['MIC1'] = hex(MIC[1])
-                    request_json['MIC2'] = hex(MIC[2])
-                    request_json['MIC3'] = hex(MIC[3])
-
-                    downlink_json = []
-                    downlink_json.append(request_json)
-
-                    f = open(os.path.expanduser(_gw_downlink_file), "a")
-
-                    print "post downlink: write"
-                    for downlink_json_line in downlink_json:
-                        # print downlink_json_line
-                        print json.dumps(downlink_json_line)
-                        f.write(json.dumps(downlink_json_line)+'\n')
-
-                    f.close()
-
-                    pending_downlink_requests.remove(downlink_request)
-
-                    # update downlink-post-queued.txt
-                    f = open(os.path.expanduser(
-                        _post_downlink_queued_file), "w")
-                    for downlink_request in pending_downlink_requests:
-                        f.write("%s" % downlink_request)
-                    # TODO: should we write all pending request for this node
-                    # or only the first one that we found?
-                    # currently, we do only the first one
-                    break
-
         if (ch == 'r'):
             rdata = sys.stdin.readline()
             print "rcv ctrl radio info (^r): "+rdata,
