@@ -188,12 +188,11 @@ def main(ldata, pdata, rdata, tdata, gwid):
 
             # RNH: in case of LoRaWAN (255 instead of length):
             decoded = base64.b64decode(ldata + ('=' if len(ldata) % 2 else ''))
-            print('decoded:', decoded)
-            if decoded[0] == 255:
+            if ord(decoded[0]) == 255:
                 print('LoRaWAN package')
 
                 def hexstr(numbers): return "".join(
-                    chr(i).encode('hex') for i in numbers)
+                    i.encode('hex') for i in numbers)
 
                 data = hexstr(decoded[1:])
                 print('data was: ' + data)
