@@ -192,6 +192,8 @@ def main(ldata, pdata, rdata, tdata, gwid):
 
             topic = 'uplink'
 
+            devid = ''
+
             if ord(decoded[0]) == 255:
                 print('LoRaWAN package')
 
@@ -200,6 +202,9 @@ def main(ldata, pdata, rdata, tdata, gwid):
 
                 data = hexstr(decoded[1:])
                 print('data was: ' + data)
+
+                devid = data[2:2+8]+','
+
                 print('keys are: ' + str(key_MQTT.appskey) + ', ' +
                       str(key_MQTT.nwkskey))
                 p = subprocess.Popen(
@@ -212,7 +217,7 @@ def main(ldata, pdata, rdata, tdata, gwid):
                 topic = 'lorawan'
 
             MQTT_uploadData('', ['', topic, ldata],
-                            str(SNR) + ',' + str(RSSI), tdata)
+                            str(devid) + str(SNR) + ',' + str(RSSI), tdata)
 
         # LoRaWAN (so encrypted packet)
         # or encapsulated encrypted
