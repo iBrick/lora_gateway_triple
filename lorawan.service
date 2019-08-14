@@ -7,7 +7,7 @@ StartLimitIntervalSec=1
 Restart=always
 RestartSec=1
 WorkingDirectory=/home/pi/lora_gateway
-ExecStart=/bin/sh -c '/home/pi/lora_gateway/uplinker /dev/spidev0.2 10 3 1 14 | python /home/pi/lora_gateway/post_processing_gw.py'
+ExecStart=/bin/sh -c '/home/pi/lora_gateway/uplinker_light /dev/spidev0.1 10 3 1 14 | python /home/pi/lora_gateway/post_light.py'
 
 [Install]
 WantedBy=multi-user.target
