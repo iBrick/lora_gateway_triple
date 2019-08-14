@@ -45,14 +45,14 @@ def getSingleChar():
 
 
 def getAllLine():
-    global _linebuf_idx
-    p = _linebuf_idx
-    _linebuf_idx = 0
-    global _has_linebuf
-    _has_linebuf = 0
-    global _linebuf
-    # return the remaining of the string and clear the _linebuf
-    return _linebuf[p:]
+    toret = ''
+
+    while True:
+        c = getSingleChar()
+        if c in ('\r', '\n'):
+            break
+        toret += c
+    return toret
 
 
 f = open(os.path.expanduser("gateway_conf.json"), "r")
@@ -117,9 +117,6 @@ while True:
 
             print "number of enabled clouds is %d" % len(_enabled_clouds)
 
-            # loop over all enabled clouds to upload data
-            # once again, it is up to the corresponding cloud script to handle the data format
-            #
             for cloud_index in range(0, len(_enabled_clouds)):
 
                 try:
