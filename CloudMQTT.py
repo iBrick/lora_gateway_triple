@@ -200,7 +200,7 @@ def main(ldata, pdata, rdata, tdata, gwid):
                 print('keys are: ' + str(key_MQTT.appskey) + ', ' +
                       str(key_MQTT.nwkskey))
                 p = subprocess.Popen(
-                    ['python3', '/home/pi/lora_gateway/decipher.py', data, key_MQTT.appskey, key_MQTT.nwkskey])
+                    ['python3', '/home/pi/lora_gateway/decipher.py', data, key_MQTT.appskey, key_MQTT.nwkskey], stdout=subprocess.PIPE)
                 out, err = p.communicate()
                 data = out.strip()
                 print('data now: ' + data)
