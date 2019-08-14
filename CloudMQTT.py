@@ -189,6 +189,9 @@ def main(ldata, pdata, rdata, tdata, gwid):
             # RNH: in case of LoRaWAN (255 instead of length):
             print('ldata len: ', len(ldata))
             decoded = base64.b64decode(ldata + ('=' if len(ldata) % 2 else ''))
+
+            topic = 'uplink'
+
             if ord(decoded[0]) == 255:
                 print('LoRaWAN package')
 
@@ -205,6 +208,8 @@ def main(ldata, pdata, rdata, tdata, gwid):
                 data = out.strip()
                 print('data now: ' + data)
                 ldata = base64.b64encode(bytearray.fromhex('ff'+data))
+
+                topic = 'lorawan'
 
             MQTT_uploadData('', ['', 'uplink', ldata],
                             str(SNR) + ',' + str(RSSI), tdata)
