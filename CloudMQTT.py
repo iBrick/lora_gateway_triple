@@ -187,6 +187,7 @@ def main(ldata, pdata, rdata, tdata, gwid):
         if True:
 
             # RNH: in case of LoRaWAN (255 instead of length):
+            print('ldata len: ', len(ldata))
             decoded = base64.b64decode(ldata + ('=' if len(ldata) % 2 else ''))
             if ord(decoded[0]) == 255:
                 print('LoRaWAN package')
