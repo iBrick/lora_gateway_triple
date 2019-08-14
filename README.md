@@ -417,6 +417,25 @@ Internet over USB
 2) mqttclient (MQTTClientLoRa)
 3) GUI (igla-gui) через startx
 
+LoRaWAN сервис
+==============
+
+Система позволяет получать обычные LoRaWAN-пакеты. Для этого вместо сервисов uplink, downlink, alarm следует запускать сервис lorawan.
+```
+cd /home/pi/lora_gateway
+sudo systemctl stop uplink downlink alarm
+sudo systemctl disable uplink downlink alarm
+sudo ln -s /home/pi/lora_gateway/lorawan.service /etc/systemd/system/
+sudo systemctl start lorawan
+sudo systemctl enable lorawan
+```
+
+Настройка ключей шифрования производится в конце файла `key_MQTT.py`
+
+Выходные данные направляются в MQTT топик вида `igla/lorawan/12131415,7,-77`, где первые две "директории" фиксированы, `12131415` - адрес отправившего пакет устройства, `7` и `-77` --  соответственно, `SNR` и `RSSI`, а данные закодированы `base64` в неизменном виде.
+
+При желании вернуть систему в предыдущее состояние можно заново запустив `setup.sh`.
+
 Запуск устройства вручную
 =========================
 
