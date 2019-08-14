@@ -82,7 +82,9 @@ print _cloud_for_lorawan_encrypted_data
 # main loop
 # ------------------------------------------------------------
 
-pdata = ''
+pdata = "0,0,0,0,0,0,0,0"
+rdata = "0,0,0"
+tdata = "N/A"
 
 while True:
 
