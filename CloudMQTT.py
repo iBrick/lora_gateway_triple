@@ -30,6 +30,7 @@ import os
 import json
 import re
 import shlex
+import base64
 
 # get key definition from external file to ease
 # update of cloud script in the future
@@ -171,7 +172,8 @@ def main(ldata, pdata, rdata, tdata, gwid):
     SNR = arr[5]
     RSSI = arr[6]
     print("RNH: we got pkg for MQTT")
-    subprocess.Popen([sys.executable, '/home/pi/lora_gateway/blink.py', 'radio'])
+    subprocess.Popen(
+        [sys.executable, '/home/pi/lora_gateway/blink.py', 'radio'])
 
     # LoRaWAN packet
     if dst == 256:
@@ -183,8 +185,39 @@ def main(ldata, pdata, rdata, tdata, gwid):
 
         # RNH: we don't need no any syntax
         if True:
-            MQTT_uploadData('', ['', 'uplink', ldata],
-                            str(SNR) + ',' + str(RSSI), tdata)
+
+            # RNH: in case of LoRaWAN (255 instead of length):
+            print('ldata len: ', len(ldata))
+            decoded = base64.b64decode(ldata + ('=' if len(ldata) % 2 else ''))
+
+            topic = 'uplink'
+
+            devid = ''
+
+            if ord(decoded[0]) == 255:
+                print('LoRaWAN package')
+
+                def hexstr(numbers): return "".join(
+                    i.encode('hex') for i in numbers)
+
+                data = hexstr(decoded[1:])
+                print('data was: ' + data)
+
+                devid = data[2:2+8]+','
+
+                print('keys are: ' + str(key_MQTT.appskey) + ', ' +
+                      str(key_MQTT.nwkskey))
+                p = subprocess.Popen(
+                    ['python3', '/home/pi/lora_gateway/decipher.py', data, key_MQTT.appskey, key_MQTT.nwkskey], stdout=subprocess.PIPE)
+                out, err = p.communicate()
+                data = out.strip()
+                print('data now: ' + data)
+                ldata = base64.b64encode(bytearray.fromhex('ff'+data))
+
+                topic = 'lorawan'
+
+            MQTT_uploadData('', ['', topic, ldata],
+                            str(devid) + str(SNR) + ',' + str(RSSI), tdata)
 
         # LoRaWAN (so encrypted packet)
         # or encapsulated encrypted

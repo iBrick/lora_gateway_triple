@@ -1,5 +1,5 @@
 include radio.makefile
-
+# 868.3 2B 7E 15 16 28 AE D2 A6 AB F7 15 88 09 CF 4F 3C
 debug = $(-DSX1272_debug_mode=2)
 
 lora_gateway_full: uplinker downlinker uplinker_light
