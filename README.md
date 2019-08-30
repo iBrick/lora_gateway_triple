@@ -135,7 +135,8 @@ WiFi настройка режима точки доступа
 	Скопировать файл wifiAP.service в /etc/systemd/system
 	
 	Выполнить: sudo systemctl enable wifiAP
-
+	chmod +x /home/pi/lora_gateway/wifiAPstart.sh
+	
 	sudo systemctl disable connmanctl
 
 	sudo systemctl disable hostapd
